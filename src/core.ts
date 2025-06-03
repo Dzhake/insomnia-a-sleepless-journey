@@ -156,7 +156,6 @@ export class Core {
 
         let refreshCount = (this.timeSum / FRAME_WAIT) | 0;
         while ((refreshCount--) > 0) {
-
             if (!this.initialized && this.assets.hasLoaded()) {
 
                 onLoad(this.event);
@@ -168,7 +167,7 @@ export class Core {
             this.input.preUpdate();
 
             if (this.initialized) {
-
+                if (document.activeElement != null && document.activeElement?.tagName == "INPUT") continue;
                 this.activeScene.update(this.event);
             }
 

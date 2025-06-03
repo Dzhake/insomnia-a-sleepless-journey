@@ -6,13 +6,22 @@ export class ArchipelagoClient {
     public client: Client;
 
     constructor() {
-        // Create a new instance of the Client class.
         this.client = new Client();
         console.log("Created archipelago client");
 
-        // Set up an event listener for whenever a message arrives and print the plain-text content to the console.
         this.client.messages.on("message", (content) => {
             console.log(content);
+        });
+
+        this.client.messages.on()
+
+        document.getElementById('input')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const input = e.target as HTMLInputElement;
+                this.input(input.value);
+                input.value = '';
+            }
         });
     }
 
@@ -33,6 +42,15 @@ export class ArchipelagoClient {
         this.client.login(ip, playerName)
             .then(() => console.log("Connected to the Archipelago server!"))
             .catch(console.error);
+    }
+
+    public input(text: string): void {
+        if (text.startsWith("connect ")) {
+            const args: string[] = text.split(' ');
+            this.connect(args[1], args[2]);
+            return;
+        }
+        this.say(text);
     }
 }
 

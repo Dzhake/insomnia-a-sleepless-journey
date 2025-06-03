@@ -23,11 +23,7 @@ const getColorString = (r : number, g : number, b : number, a = 1.0) : string =>
 
 
 const createCanvasDiv = () : HTMLDivElement => {
-
-    let cdiv = document.createElement("div");
-    cdiv.setAttribute("style", 
-        "position: absolute; top: 0; left: 0; z-index: -1;");
-
+    const cdiv = document.getElementById("cdiv");
     return cdiv;
 }
 
@@ -66,17 +62,6 @@ export const createHtml5Canvas = (cdiv : HTMLDivElement,
     let canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-
-    if (useAsMainCanvas) {
-
-        canvas.setAttribute(
-            "style", 
-            "position: absolute; top: 0; left: 0; z-index: -1;" + 
-            "image-rendering: optimizeSpeed;" + 
-            "image-rendering: pixelated;" +
-            "image-rendering: -moz-crisp-edges;"
-            );
-    }
 
     if (cdiv != null) {
 

@@ -1,0 +1,19 @@
+body {
+    overflow: hidden;
+    background-color: black;
+    cursor: none;
+}
+
+canvas {
+    top: 0;
+    left: 0;
+    z-index: -1;
+    image-rendering: optimizeSpeed;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+}
+
+#cdiv {
+    display: flex;
+    justify-content: center;
+}
