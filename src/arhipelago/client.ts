@@ -3,6 +3,17 @@ import { Client } from "archipelago.js";
 
 export class ArchipelagoClient {
 
+    private static instance: ArchipelagoClient;
+
+    public static getInstance(): ArchipelagoClient {
+        if (!ArchipelagoClient.instance) {
+            ArchipelagoClient.instance = new ArchipelagoClient();
+        }
+        return ArchipelagoClient.instance;
+    }
+
+
+    
     public client: Client;
 
     constructor() {
@@ -23,15 +34,6 @@ export class ArchipelagoClient {
                 input.value = '';
             }
         });
-    }
-
-    private static instance: ArchipelagoClient;
-
-    public static getInstance(): ArchipelagoClient {
-        if (!ArchipelagoClient.instance) {
-            ArchipelagoClient.instance = new ArchipelagoClient();
-        }
-        return ArchipelagoClient.instance;
     }
 
     public say(text: string): void {
