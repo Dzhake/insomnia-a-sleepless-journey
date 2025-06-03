@@ -1,14 +1,14 @@
-import { Camera } from "./camera.js";
-import { Canvas, Flip } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { CollisionObject } from "./gameobject.js";
-import { clamp } from "./math.js";
-import { SpawnProjectileCallback } from "./objectmanager.js";
+import { Camera } from "./camera.ts";
+import { Canvas, Flip } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { CollisionObject } from "./gameobject.ts";
+import { clamp } from "./math.ts";
+import { SpawnProjectileCallback } from "./objectmanager.ts";
 import { Player } from "./player";
-import { ProgressManager } from "./progress.js";
-import { Projectile } from "./projectile.js";
-import { Sprite } from "./sprite.js";
-import { Vector2 } from "./vector.js";
+import { ProgressManager } from "./progress.ts";
+import { Projectile } from "./projectile.ts";
+import { Sprite } from "./sprite.ts";
+import { Vector2 } from "./vector.ts";
 
 
 const DEATH_TIME = 30;

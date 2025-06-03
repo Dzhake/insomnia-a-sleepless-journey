@@ -1,9 +1,9 @@
-import { Camera } from "./camera.js";
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { GameObject, nextObject } from "./gameobject.js";
-import { negMod } from "./math.js";
-import { Vector2 } from "./vector.js";
+import { Camera } from "./camera.ts";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { GameObject, nextObject } from "./gameobject.ts";
+import { negMod } from "./math.ts";
+import { Vector2 } from "./vector.ts";
 
 
 

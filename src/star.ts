@@ -1,10 +1,10 @@
 import { Camera } from "./camera";
 import { Canvas } from "./canvas";
-import { CoreEvent } from "./core.js";
-import { WeakInteractionTarget } from "./interactiontarget.js";
-import { Player } from "./player.js";
-import { Sprite } from "./sprite.js";
-import { Vector2 } from "./vector.js";
+import { CoreEvent } from "./core.ts";
+import { WeakInteractionTarget } from "./interactiontarget.ts";
+import { Player } from "./player.ts";
+import { Sprite } from "./sprite.ts";
+import { Vector2 } from "./vector.ts";
 
 
 export class Star extends WeakInteractionTarget {

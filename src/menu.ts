@@ -1,9 +1,9 @@
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { negMod } from "./math.js";
-import { Bitmap, State } from "./types.js";
-import { drawBox } from "./messagebox.js";
-import { ActivableObject } from "./activableobject.js";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { negMod } from "./math.ts";
+import { Bitmap, State } from "./types.ts";
+import { drawBox } from "./messagebox.ts";
+import { ActivableObject } from "./activableobject.ts";
 
 export class MenuButton {
 

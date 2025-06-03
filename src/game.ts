@@ -1,19 +1,19 @@
-import { Camera } from "./camera.js";
-import { Canvas } from "./canvas.js";
-import { CoreEvent, Scene } from "./core.js";
-import { HintBox } from "./hintbox.js";
-import { WorldMap } from "./map.js";
-import { Menu, MenuButton } from "./menu.js";
-import { MessageBox } from "./messagebox.js";
-import { ObjectManager } from "./objectmanager.js";
-import { ProgressManager } from "./progress.js";
-import { SaveManager } from "./savemanager.js";
-import { saveGame } from "./savepoint.js";
-import { Sprite } from "./sprite.js";
-import { Stage } from "./stage.js";
-import { TitleScreen } from "./titlescreen.js";
-import { TransitionEffectType } from "./transition.js";
-import { State } from "./types.js";
+import { Camera } from "./camera.ts";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent, Scene } from "./core.ts";
+import { HintBox } from "./hintbox.ts";
+import { WorldMap } from "./map.ts";
+import { Menu, MenuButton } from "./menu.ts";
+import { MessageBox } from "./messagebox.ts";
+import { ObjectManager } from "./objectmanager.ts";
+import { ProgressManager } from "./progress.ts";
+import { SaveManager } from "./savemanager.ts";
+import { saveGame } from "./savepoint.ts";
+import { Sprite } from "./sprite.ts";
+import { Stage } from "./stage.ts";
+import { TitleScreen } from "./titlescreen.ts";
+import { TransitionEffectType } from "./transition.ts";
+import { State } from "./types.ts";
 
 
 export const THEME_VOLUME = 0.40;

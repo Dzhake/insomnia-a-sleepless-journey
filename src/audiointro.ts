@@ -1,8 +1,8 @@
-import { Canvas } from "./canvas.js";
-import { CoreEvent, Scene } from "./core.js";
-import { Intro } from "./intro.js";
-import { Menu, MenuButton } from "./menu.js";
-import { TitleScreen } from "./titlescreen.js";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent, Scene } from "./core.ts";
+import { Intro } from "./intro.ts";
+import { Menu, MenuButton } from "./menu.ts";
+import { TitleScreen } from "./titlescreen.ts";
 
 
 

@@ -1,0 +1,16 @@
+{
+  "name": "insomnia-a-sleepless-journey",
+  "version": "1.0.0",
+  "description": "![](https://github.com/jani-nykanen/insomnia-a-sleepless-journey/blob/main/assets/bitmaps/logo.png?raw=true)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}

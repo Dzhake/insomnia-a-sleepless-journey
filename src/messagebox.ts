@@ -1,8 +1,8 @@
-import { ActivableObject } from "./activableobject.js";
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { Menu, MenuButton } from "./menu.js";
-import { Vector2 } from "./vector.js";
+import { ActivableObject } from "./activableobject.ts";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { Menu, MenuButton } from "./menu.ts";
+import { Vector2 } from "./vector.ts";
 
 
 export const drawBox = (canvas : Canvas, x : number, y : number, w : number, h : number) : void => {

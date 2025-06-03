@@ -1,8 +1,8 @@
-import { Camera } from "./camera.js";
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { Sprite } from "./sprite.js";
-import { Rect, Vector2 } from "./vector.js";
+import { Camera } from "./camera.ts";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { Sprite } from "./sprite.ts";
+import { Rect, Vector2 } from "./vector.ts";
 
 
 export const updateSpeedAxis = (speed : number, target : number, step : number) : number => {

@@ -1,7 +1,7 @@
-import { Camera } from "./camera.js";
-import { CoreEvent } from "./core.js";
-import { WeakGameObject } from "./gameobject.js";
-import { Player } from "./player.js";
+import { Camera } from "./camera.ts";
+import { CoreEvent } from "./core.ts";
+import { WeakGameObject } from "./gameobject.ts";
+import { Player } from "./player.ts";
 
 
 export class WeakInteractionTarget extends WeakGameObject {

@@ -1,7 +1,7 @@
-import { GamePadListener } from "./gamepad.js";
-import { KeyboardListener } from "./keyboard.js";
-import { State } from "./types.js";
-import { Vector2 } from "./vector.js";
+import { GamePadListener } from "./gamepad.ts";
+import { KeyboardListener } from "./keyboard.ts";
+import { State } from "./types.ts";
+import { Vector2 } from "./vector.ts";
 
 
 const INPUT_SPECIAL_EPS = 0.25;

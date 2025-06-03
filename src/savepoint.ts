@@ -1,12 +1,12 @@
-import { Camera } from "./camera.js";
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { StrongInteractionTarget } from "./interactiontarget.js";
-import { MessageBox } from "./messagebox.js";
-import { Player } from "./player.js";
-import { SaveManager } from "./savemanager.js";
-import { Sprite } from "./sprite.js";
-import { Vector2 } from "./vector.js";
+import { Camera } from "./camera.ts";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { StrongInteractionTarget } from "./interactiontarget.ts";
+import { MessageBox } from "./messagebox.ts";
+import { Player } from "./player.ts";
+import { SaveManager } from "./savemanager.ts";
+import { Sprite } from "./sprite.ts";
+import { Vector2 } from "./vector.ts";
 
 
 const MESSAGE_TIME_MOVE = 12;

@@ -1,7 +1,7 @@
-import { Canvas } from "./canvas.js";
-import { CoreEvent, Scene } from "./core.js";
-import { MessageBox } from "./messagebox.js";
-import { TransitionEffectType } from "./transition.js";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent, Scene } from "./core.ts";
+import { MessageBox } from "./messagebox.ts";
+import { TransitionEffectType } from "./transition.ts";
 
 
 export class Ending implements Scene {

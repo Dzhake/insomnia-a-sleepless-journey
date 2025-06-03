@@ -1,7 +1,7 @@
-import { ActivableObject } from "./activableobject.js";
-import { Camera } from "./camera.js";
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
+import { ActivableObject } from "./activableobject.ts";
+import { Camera } from "./camera.ts";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
 
 
 export class HintBox extends ActivableObject {

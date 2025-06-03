@@ -1,8 +1,8 @@
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { ExistingObject } from "./gameobject.js";
-import { Sprite } from "./sprite.js";
-import { Vector2 } from "./vector.js";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { ExistingObject } from "./gameobject.ts";
+import { Sprite } from "./sprite.ts";
+import { Vector2 } from "./vector.ts";
 
 
 export class Dust extends ExistingObject {

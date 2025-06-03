@@ -1,5 +1,5 @@
-import { Canvas, Flip } from "./canvas.js";
-import { Bitmap } from "./types.js";
+import { Canvas, Flip } from "./canvas.ts";
+import { Bitmap } from "./types.ts";
 
 
 export class Sprite {

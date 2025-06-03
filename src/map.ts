@@ -1,12 +1,12 @@
-import { Camera } from "./camera.js";
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { Localization } from "./localization.js";
-import { drawBox } from "./messagebox.js";
-import { ObjectManager } from "./objectmanager.js";
-import { ProgressManager } from "./progress.js";
-import { Stage } from "./stage.js";
-import { Rect, Vector2 } from "./vector.js";
+import { Camera } from "./camera.ts";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { Localization } from "./localization.ts";
+import { drawBox } from "./messagebox.ts";
+import { ObjectManager } from "./objectmanager.ts";
+import { ProgressManager } from "./progress.ts";
+import { Stage } from "./stage.ts";
+import { Rect, Vector2 } from "./vector.ts";
 
 
 export class WorldMap {

@@ -1,6 +1,6 @@
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { Vector2 } from "./vector.js";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { Vector2 } from "./vector.ts";
 
 
 export const enum TransitionEffectType {

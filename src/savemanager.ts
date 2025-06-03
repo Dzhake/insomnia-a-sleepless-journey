@@ -1,4 +1,4 @@
-import { ProgressManager } from "./progress.js";
+import { ProgressManager } from "./progress.ts";
 
 
 

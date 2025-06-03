@@ -1,10 +1,10 @@
-import { AssetManager } from "./assets.js";
-import { AudioPlayer } from "./audioplayer.js";
-import { Canvas } from "./canvas.js";
-import { InputListener } from "./input.js";
-import { Localization } from "./localization.js";
-import { TransitionEffectManager } from "./transition.js";
-import { RGBA } from "./vector.js";
+import { AssetManager } from "./assets.ts";
+import { AudioPlayer } from "./audioplayer.ts";
+import { Canvas } from "./canvas.ts";
+import { InputListener } from "./input.ts";
+import { Localization } from "./localization.ts";
+import { TransitionEffectManager } from "./transition.ts";
+import { RGBA } from "./vector.ts";
 
 
 export class CoreEvent {

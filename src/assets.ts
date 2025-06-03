@@ -1,7 +1,7 @@
-import { AudioPlayer } from "./audioplayer.js";
-import { AudioSample } from "./sample.js";
-import { Tilemap } from "./tilemap.js";
-import { Bitmap, KeyValuePair } from "./types.js";
+import { AudioPlayer } from "./audioplayer.ts";
+import { AudioSample } from "./sample.ts";
+import { Tilemap } from "./tilemap.ts";
+import { Bitmap, KeyValuePair } from "./types.ts";
 
 
 class AssetContainer<T> {

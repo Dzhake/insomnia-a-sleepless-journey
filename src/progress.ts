@@ -1,7 +1,7 @@
-import { Camera } from "./camera.js";
-import { negMod } from "./math.js";
-import { Stage } from "./stage.js";
-import { KeyValuePair } from "./types.js";
+import { Camera } from "./camera.ts";
+import { negMod } from "./math.ts";
+import { Stage } from "./stage.ts";
+import { KeyValuePair } from "./types.ts";
 
 
 

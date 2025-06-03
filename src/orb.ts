@@ -1,13 +1,13 @@
-import { Camera } from "./camera.js";
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { StrongInteractionTarget } from "./interactiontarget.js";
-import { MessageBox } from "./messagebox.js";
-import { Player } from "./player.js";
-import { ProgressManager } from "./progress.js";
-import { Sprite } from "./sprite.js";
-import { TransitionEffectType } from "./transition.js";
-import { Vector2 } from "./vector.js";
+import { Camera } from "./camera.ts";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { StrongInteractionTarget } from "./interactiontarget.ts";
+import { MessageBox } from "./messagebox.ts";
+import { Player } from "./player.ts";
+import { ProgressManager } from "./progress.ts";
+import { Sprite } from "./sprite.ts";
+import { TransitionEffectType } from "./transition.ts";
+import { Vector2 } from "./vector.ts";
 
 
 const REQUIRED_VAR_NAME = ["stars", "kills"];

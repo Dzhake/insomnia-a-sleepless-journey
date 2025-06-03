@@ -1,9 +1,9 @@
-import { AssetManager } from "./assets.js";
-import { CoreEvent } from "./core.js";
-import { clamp } from "./math.js";
-import { Sprite } from "./sprite.js";
-import { Bitmap } from "./types.js";
-import { RGBA, Vector2 } from "./vector.js";
+import { AssetManager } from "./assets.ts";
+import { CoreEvent } from "./core.ts";
+import { clamp } from "./math.ts";
+import { Sprite } from "./sprite.ts";
+import { Bitmap } from "./types.ts";
+import { RGBA, Vector2 } from "./vector.ts";
 
 
 export const enum Flip {

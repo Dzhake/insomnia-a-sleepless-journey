@@ -1,10 +1,10 @@
-import { Canvas } from "./canvas.js";
-import { CoreEvent, Scene } from "./core.js";
-import { GameScene } from "./game.js";
-import { MessageBox } from "./messagebox.js";
-import { TitleScreen } from "./titlescreen.js";
-import { TransitionEffectType } from "./transition.js";
-import { Vector2 } from "./vector.js";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent, Scene } from "./core.ts";
+import { GameScene } from "./game.ts";
+import { MessageBox } from "./messagebox.ts";
+import { TitleScreen } from "./titlescreen.ts";
+import { TransitionEffectType } from "./transition.ts";
+import { Vector2 } from "./vector.ts";
 
 
 export class Intro implements Scene {

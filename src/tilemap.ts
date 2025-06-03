@@ -1,5 +1,5 @@
-import { clamp } from "./math.js";
-import { KeyValuePair } from "./types.js";
+import { clamp } from "./math.ts";
+import { KeyValuePair } from "./types.ts";
 
 
 export class Tilemap {

@@ -1,5 +1,5 @@
-import { clamp } from "./math.js";
-import { AudioSample } from "./sample.js";
+import { clamp } from "./math.ts";
+import { AudioSample } from "./sample.ts";
 
  
 export class AudioPlayer {

@@ -1,5 +1,5 @@
-import { State } from "./types.js";
-import { Vector2 } from "./vector.js";
+import { State } from "./types.ts";
+import { Vector2 } from "./vector.ts";
 
 
 export class GamePadListener {

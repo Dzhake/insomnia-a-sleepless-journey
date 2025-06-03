@@ -1,13 +1,13 @@
-import { Canvas } from "./canvas.js";
-import { Scene, CoreEvent } from "./core.js";
-import { GameScene } from "./game.js";
-import { Menu, MenuButton } from "./menu.js";
-import { MessageBox } from "./messagebox.js";
-import { StoryIntro } from "./storyintro.js";
-import { TransitionEffectType } from "./transition.js";
-import { State } from "./types.js";
-import { Vector2 } from "./vector.js";
-import { VERSION } from "./version.js";
+import { Canvas } from "./canvas.ts";
+import { Scene, CoreEvent } from "./core.ts";
+import { GameScene } from "./game.ts";
+import { Menu, MenuButton } from "./menu.ts";
+import { MessageBox } from "./messagebox.ts";
+import { StoryIntro } from "./storyintro.ts";
+import { TransitionEffectType } from "./transition.ts";
+import { State } from "./types.ts";
+import { Vector2 } from "./vector.ts";
+import { VERSION } from "./version.ts";
 
 
 const TITLE_MUSIC_VOLUME = 0.50;

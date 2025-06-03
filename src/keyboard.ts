@@ -1,4 +1,4 @@
-import { KeyValuePair, State } from "./types.js";
+import { KeyValuePair, State } from "./types.ts";
 
 
 

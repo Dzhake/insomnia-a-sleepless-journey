@@ -1,7 +1,7 @@
-import { CoreEvent } from "./core.js";
-import { HintBox } from "./hintbox.js";
-import { WeakInteractionTarget } from "./interactiontarget.js";
-import { Sprite } from "./sprite.js";
+import { CoreEvent } from "./core.ts";
+import { HintBox } from "./hintbox.ts";
+import { WeakInteractionTarget } from "./interactiontarget.ts";
+import { Sprite } from "./sprite.ts";
 
 
 export class HintTrigger extends WeakInteractionTarget {

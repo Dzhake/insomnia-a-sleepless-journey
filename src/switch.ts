@@ -1,10 +1,10 @@
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { boxOverlay, WeakGameObject } from "./gameobject.js";
-import { Player } from "./player.js";
-import { Sprite } from "./sprite.js";
-import { Stage } from "./stage.js";
-import { Vector2 } from "./vector.js";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { boxOverlay, WeakGameObject } from "./gameobject.ts";
+import { Player } from "./player.ts";
+import { Sprite } from "./sprite.ts";
+import { Stage } from "./stage.ts";
+import { Vector2 } from "./vector.ts";
 
 
 export class Switch extends WeakGameObject {

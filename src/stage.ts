@@ -1,17 +1,17 @@
-import { Camera } from "./camera.js";
-import { Bitmap } from "./types.js";
-import { Canvas } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { negMod } from "./math.js";
-import { Tilemap } from "./tilemap.js";
-import { ObjectManager } from "./objectmanager.js";
-import { CollisionObject, nextObject } from "./gameobject.js";
-import { Particle } from "./particle.js";
-import { Vector2 } from "./vector.js";
-import { Sprite } from "./sprite.js";
-import { NPC } from "./npc.js";
-import { ProgressManager } from "./progress.js";
-import { SnowflakeGenerator } from "./snowflakes.js";
+import { Camera } from "./camera.ts";
+import { Bitmap } from "./types.ts";
+import { Canvas } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { negMod } from "./math.ts";
+import { Tilemap } from "./tilemap.ts";
+import { ObjectManager } from "./objectmanager.ts";
+import { CollisionObject, nextObject } from "./gameobject.ts";
+import { Particle } from "./particle.ts";
+import { Vector2 } from "./vector.ts";
+import { Sprite } from "./sprite.ts";
+import { NPC } from "./npc.ts";
+import { ProgressManager } from "./progress.ts";
+import { SnowflakeGenerator } from "./snowflakes.ts";
 
 
 const COLLISION_DOWN = 0b0001;

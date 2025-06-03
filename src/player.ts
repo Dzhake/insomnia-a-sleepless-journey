@@ -1,17 +1,17 @@
-import { Camera } from "./camera.js";
-import { Canvas, Flip } from "./canvas.js";
-import { CoreEvent } from "./core.js";
-import { Dust } from "./dust.js";
-import { boxOverlay, CollisionObject, nextObject, WeakGameObject } from "./gameobject.js";
-import { negMod } from "./math.js";
-import { SpawnProjectileCallback } from "./objectmanager.js";
-import { ProgressManager } from "./progress.js";
-import { Projectile } from "./projectile.js";
-import { SavePoint } from "./savepoint.js";
-import { Sprite } from "./sprite.js";
-import { Stage } from "./stage.js";
-import { State } from "./types.js";
-import { Vector2 } from "./vector.js";
+import { Camera } from "./camera.ts";
+import { Canvas, Flip } from "./canvas.ts";
+import { CoreEvent } from "./core.ts";
+import { Dust } from "./dust.ts";
+import { boxOverlay, CollisionObject, nextObject, WeakGameObject } from "./gameobject.ts";
+import { negMod } from "./math.ts";
+import { SpawnProjectileCallback } from "./objectmanager.ts";
+import { ProgressManager } from "./progress.ts";
+import { Projectile } from "./projectile.ts";
+import { SavePoint } from "./savepoint.ts";
+import { Sprite } from "./sprite.ts";
+import { Stage } from "./stage.ts";
+import { State } from "./types.ts";
+import { Vector2 } from "./vector.ts";
 
 
 const BASE_JUMP_SPEED = 2.0;

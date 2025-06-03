@@ -1,5 +1,5 @@
-import { AudioIntro } from "./audiointro.js";
-import { Core } from "./core.js";
+import { AudioIntro } from "./audiointro.ts";
+import { Core } from "./core.ts";
 
 
 window.onload = () => (new Core(160, 144))
