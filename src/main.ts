@@ -1,5 +1,6 @@
 import { AudioIntro } from "./audiointro.ts";
 import { Core } from "./core.ts";
+import "./arhipelago/global.ts"
 
 
 window.onload = () => (new Core(160, 144))
