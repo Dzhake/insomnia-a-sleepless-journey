@@ -1580,4 +1580,4 @@ const ENEMY_TYPES = [
     FaceRight, FaceLeft, SpikeSeal,
     Plant];
 
-export const getEnemyType = (index : number) : Function => ENEMY_TYPES[clamp(index, 0, ENEMY_TYPES.length-1)];
+export const getEnemyType = (index : number) : Class => ENEMY_TYPES[clamp(index, 0, ENEMY_TYPES.length-1)];

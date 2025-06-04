@@ -17,7 +17,7 @@ export class ArchipelagoClient {
     public client: Client;
 
     constructor() {
-        this.showConnected(false);
+        //this.showConnected(false);
         this.client = new Client();
         console.log("Created archipelago client");
 
