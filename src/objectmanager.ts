@@ -554,8 +554,8 @@ export class ObjectManager {
     }
 
 
-    public killPlayer(event : CoreEvent) {
-
+    public killPlayer(event : CoreEvent, resetSpawnpoint?: boolean) {
+        if (resetSpawnpoint == true) this.player.resetActiveCheckpointReference();
         this.player.startDeath(event);
     }
 

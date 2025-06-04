@@ -1,4 +1,4 @@
-import { Client } from "archipelago.js";
+import { Client, defaultConnectionOptions } from "archipelago.js";
 
 
 export class ArchipelagoClient {
@@ -13,10 +13,11 @@ export class ArchipelagoClient {
     }
 
 
-    
+
     public client: Client;
 
     constructor() {
+        this.showConnected(false);
         this.client = new Client();
         console.log("Created archipelago client");
 
@@ -26,7 +27,7 @@ export class ArchipelagoClient {
 
         this.client.messages.on()
 
-        document.getElementById('input')?.addEventListener('keydown', (e) => {
+        document.getElementById('input-chat').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 const input = e.target as HTMLInputElement;
@@ -34,25 +35,36 @@ export class ArchipelagoClient {
                 input.value = '';
             }
         });
+
+        document.getElementById('connect').addEventListener('click', (e) => {
+            console.log('ahaaa');
+            this.login(
+                (document.getElementById('input-host') as HTMLInputElement).value,
+                (document.getElementById('input-port') as HTMLInputElement).value,
+                (document.getElementById('input-slot') as HTMLInputElement).value,
+                (document.getElementById('input-password') as HTMLInputElement).value
+            );
+        });
     }
 
-    public say(text: string): void {
-        this.client.messages.say(text);
-    }
-
-    public connect(ip: string, playerName: string) {
-        this.client.login(ip, playerName)
-            .then(() => console.log("Connected to the Archipelago server!"))
-            .catch(console.error);
+    public login(host: string, port: string, playerName: string, password: string) {
+        this.client.login(host + ':' + port, playerName, "insomnia-a-sleepless-journey", { password: password })
+            .then(function () { console.log("Connected to the Archipelago server!"); this.showConnected(true); })
+            .catch(function (e) { console.error(e); alert(e); });
     }
 
     public input(text: string): void {
-        if (text.startsWith("connect ")) {
-            const args: string[] = text.split(' ');
-            this.connect(args[1], args[2]);
-            return;
-        }
-        this.say(text);
+        this.client.messages.say(text);
+    }
+
+    public showId(id: string, value: boolean): void {
+        document.getElementById(id).style.setProperty("display", value ? "" : "none")
+    }
+
+    public showConnected(value: boolean): void {
+        this.showId('connection-inputs', !value);
+        this.showId('cdiv', value);
+        this.showId('input-chat', value);
     }
 }
 

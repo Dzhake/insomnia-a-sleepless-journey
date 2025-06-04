@@ -14,6 +14,11 @@ export class KeyboardListener {
 
         this.keys = new Array<KeyValuePair<State>> ();
         this.prevent = new Array<string> ();
+        this.prevent.push("ArrowUp");
+        this.prevent.push("ArrowDown");
+        this.prevent.push("ArrowLeft");
+        this.prevent.push("ArrowRight");
+        this.prevent.push("Space");
 
         this.anyPressed = false;
 

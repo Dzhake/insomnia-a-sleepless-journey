@@ -98,6 +98,18 @@ export class GameScene implements Scene {
                 new MenuButton(loc.findValue(["pauseMenu", "1"]),
                 event => {
 
+                    this.message.addMessages(event.localization.findValue(["respawnAtStart"]));
+                    this.message.activate(0, true, event => {
+
+                        event.audio.resumeMusic();
+                        this.objects.killPlayer(event, true);
+                        this.pauseMenu.deactivate();
+                    });
+                }),
+
+                new MenuButton(loc.findValue(["pauseMenu", "2"]),
+                event => {
+
                     this.message.addMessages(event.localization.findValue(["respawn"]));
                     this.message.activate(0, true, event => {
 
@@ -108,7 +120,7 @@ export class GameScene implements Scene {
                     });
                 }),
 
-                new MenuButton(loc.findValue(["pauseMenu", "2"]),
+                new MenuButton(loc.findValue(["pauseMenu", "3"]),
                 event => {
 
                     if (!this.isFinalArea) {
@@ -122,7 +134,7 @@ export class GameScene implements Scene {
                     }
                 }),
 
-                new MenuButton(loc.findValue(["pauseMenu", "3"]),
+                new MenuButton(loc.findValue(["pauseMenu", "4"]),
                 event => {
 
                     if (this.activateMap(() => {
@@ -141,7 +153,7 @@ export class GameScene implements Scene {
                     event.audio.resumeMusic();
                 }),
 */
-                new MenuButton(loc.findValue(["pauseMenu", "4"]),
+                new MenuButton(loc.findValue(["pauseMenu", "5"]),
                 event => {
 
                     this.message.addMessages(loc.findValue(["quitGame"]));

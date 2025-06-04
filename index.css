@@ -1,19 +1,20 @@
 body {
-    overflow: hidden;
+    overflow-x: hidden;
     background-color: black;
-    cursor: none;
+    color: white;
 }
 
 canvas {
     top: 0;
     left: 0;
     z-index: -1;
-    image-rendering: optimizeSpeed;
     image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
+    cursor: none;
+    width: 100%;
+    position: static;
 }
 
-#cdiv {
+#cdiv-wrapper {
     display: flex;
     justify-content: center;
 }

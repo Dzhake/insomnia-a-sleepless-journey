@@ -157,10 +157,12 @@
     "worldMap": "WORLD MAP",
 
     "respawn": ["Kill yourself\nand respawn\nin the latest\ncheckpoint?"],
+    "respawnAtStart": ["Kill yourself\nand respawn\nin your bed?"],
 
 
     "pauseMenu": [
         "Resume",
+        "Respawn at start",
         "Respawn",
         "Save Game",
         "World Map",

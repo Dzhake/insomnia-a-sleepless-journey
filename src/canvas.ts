@@ -64,9 +64,7 @@ export const createHtml5Canvas = (cdiv : HTMLDivElement,
     canvas.height = height;
 
     if (cdiv != null) {
-
         cdiv.appendChild(canvas);
-        document.body.appendChild(cdiv);
     }
     
     return canvas;

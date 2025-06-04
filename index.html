@@ -1,15 +1,33 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>Insomnia</title>
-    <link rel="stylesheet" href="/index.css"/>
+    <link rel="stylesheet" href="/index.css" />
 </head>
+
 <body>
-    <script src="/src/main.ts" type="module"></script>
-    <div id="cdiv">
-        <!-- Canvas is created at runtime in canvas.ts -->
+    <div id="cdiv-wrapper">
+        <div id="cdiv">
+            <!-- Canvas is created at runtime in canvas.ts -->
+        </div>
     </div>
-    <input id="input" type="text">
+
+    <div id="connection-inputs">
+        <ul>
+            <p>Host: </p><input id="input-host" type="text" value="archipelago.gg">
+            <p>Port: </p><input id="input-port" type="text" value="38281">
+            <p>Player slot: </p><input id="input-slot" type="text" value="Player1">
+            <p>Password: </p><input id="input-password" type="text">
+            <br><br>
+            <button id="connect">Connect</button>
+        </ul>
+    </div>
+
+    <input id="input-chat" type="text" style="display: none;">
+
+    <script src="/src/main.ts" type="module"></script>
 </body>
+
 </html>

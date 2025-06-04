@@ -1353,6 +1353,8 @@ export class Player extends CollisionObject {
         this.activeCheckpoint = p;
     }
 
+    public resetActiveCheckpointReference = () : void => this.activeCheckpoint = null;
+
 
     public maximizeHealth() {
 
