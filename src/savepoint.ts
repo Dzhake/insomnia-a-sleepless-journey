@@ -31,7 +31,7 @@ export const saveGame = (message : MessageBox, saveManager : SaveManager, event 
             message.addMessages(event.localization.findValue(["gameSaveFailed"]));
         }
         message.activate();
-    });
+    }, 0);
 }
 
 

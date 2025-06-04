@@ -100,7 +100,7 @@ export class MessageBox extends ActivableObject {
 
 
     public activate(waitTime = 0, confirm = false, 
-        confirmEvent = (event : CoreEvent) => {}) {
+        confirmEvent = (event : CoreEvent) => {}, startingIndex: int = 1) {
 
         if (this.queue.length == 0) return;
 
@@ -118,7 +118,7 @@ export class MessageBox extends ActivableObject {
         this.confirm = confirm;
         this.confirmEvent = confirmEvent;
 
-        this.yesNoBox.activate(1);
+        this.yesNoBox.activate(startingIndex);
     }
 
 
