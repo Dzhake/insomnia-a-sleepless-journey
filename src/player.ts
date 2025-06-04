@@ -20,78 +20,80 @@ const BASE_GRAVITY = 3.0;
 
 export class Player extends CollisionObject {
 
-    private sprSpin : Sprite;
+    private sprSpin: Sprite;
 
-    private startPos : Vector2;
+    private startPos: Vector2;
 
-    private jumpMargin : number;
-    private jumpTimer : number;
-    private canJump : boolean;
-    private jumpSpeed : number;
-    private doubleJump : boolean;
-    private jumpReleased : boolean;
+    private jumpMargin: number;
+    private jumpTimer: number;
+    private canJump: boolean;
+    private jumpSpeed: number;
+    private doubleJump: boolean;
+    private jumpReleased: boolean;
 
-    private touchWater : boolean;
+    private touchWater: boolean;
 
-    private faceDir : number;
-    private flip : Flip;
+    private faceDir: number;
+    private flip: Flip;
 
-    private dust : Array<Dust>;
-    private dustTimer : number;
+    private dust: Array<Dust>;
+    private dustTimer: number;
 
-    private running : boolean;
+    private running: boolean;
 
-    private climbing : boolean;
-    private touchLadder : boolean;
-    private isLadderTop : boolean;
-    private climbX : number;
-    private climbFrame : number;
+    private climbing: boolean;
+    private touchLadder: boolean;
+    private isLadderTop: boolean;
+    private climbX: number;
+    private climbFrame: number;
 
-    private throwing : boolean;
-    private canThrow : boolean;
+    private throwing: boolean;
+    private canThrow: boolean;
 
-    private sliding : boolean;
-    private slideTimer : number;
+    private sliding: boolean;
+    private slideTimer: number;
 
-    private downAttacking : boolean;
-    private downAttackWaitTimer : number;
+    private downAttacking: boolean;
+    private downAttackWaitTimer: number;
 
-    private spinning : boolean;
-    private spinCount : number;
-    private canSpin : boolean;
-    private spinHitbox : Vector2;
+    private spinning: boolean;
+    private spinCount: number;
+    private canSpin: boolean;
+    private spinHitbox: Vector2;
 
-    private invulnerabilityTimer : number;
-    private knockbackTimer : number;
+    private invulnerabilityTimer: number;
+    private knockbackTimer: number;
 
-    private flapping : boolean;
+    private flapping: boolean;
 
-    private showActionSymbol : boolean;
-    private actionSymbolId : number;
-    private sprActionSymbol : Sprite;
+    private showActionSymbol: boolean;
+    private actionSymbolId: number;
+    private sprActionSymbol: Sprite;
 
-    private holdingItem : boolean;
-    private itemID : number;
+    private holdingItem: boolean;
+    private itemID: number;
 
-    private inside : boolean;
-    private startInside : boolean;
-    private hasTeleported : boolean;
+    private inside: boolean;
+    private startInside: boolean;
+    private hasTeleported: boolean;
 
-    private health : number;
-    private deathTimer : number;
+    private health: number;
+    private deathTimer: number;
 
-    private activeCheckpoint : SavePoint;
+    private activeCheckpoint: SavePoint;
 
-    private projectileCb : SpawnProjectileCallback;
+    private projectileCb: SpawnProjectileCallback;
 
-    public readonly progress : ProgressManager;
-    public readonly isInFinalArea : boolean;
+    public readonly progress: ProgressManager;
+    public readonly isInFinalArea: boolean;
+
+    private static instance: Player;
 
 
-    constructor(x : number, y : number, projectileCb : SpawnProjectileCallback,
-        progress : ProgressManager, inside = false, isInFinalArea = false) {
+    constructor(x: number, y: number, projectileCb: SpawnProjectileCallback,
+        progress: ProgressManager, inside = false, isInFinalArea = false) {
 
-        super(x, y+1);
+        super(x, y + 1);
 
         this.sprSpin = new Sprite(32, 16);
 
@@ -121,9 +123,9 @@ export class Player extends CollisionObject {
 
         this.inCamera = true;
 
-        this.dust = new Array<Dust> ();
+        this.dust = new Array<Dust>();
         this.dustTimer = 0;
-    
+
         this.climbX = 0;
         this.climbing = false;
         this.touchLadder = false;
@@ -172,13 +174,14 @@ export class Player extends CollisionObject {
         this.isInFinalArea = isInFinalArea;
     }
 
+    public static getInstance(): Player { return Player.instance; }
 
-    private startClimbing(event : CoreEvent) {
+    private startClimbing(event: CoreEvent) {
 
         if (!this.climbing &&
-            this.touchLadder && 
-            (!this.isLadderTop && event.input.upPress() || 
-            (this.isLadderTop && event.input.downPress()))) {
+            this.touchLadder &&
+            (!this.isLadderTop && event.input.upPress() ||
+                (this.isLadderTop && event.input.downPress()))) {
 
             this.climbing = true;
             this.jumpTimer = 0;
@@ -199,7 +202,7 @@ export class Player extends CollisionObject {
     }
 
 
-    private climb(event : CoreEvent) {
+    private climb(event: CoreEvent) {
 
         const EPS = 0.1;
         const CLIMB_SPEED = 0.5;
@@ -210,10 +213,10 @@ export class Player extends CollisionObject {
         let sx = event.input.getStick().x;
         if (Math.abs(sx) > EPS)
             this.faceDir = sx > 0 ? 1 : -1;
-            
+
         this.flip = Flip.None;
-        
-        let s = event.input.getAction("fire2");
+
+        let s = event.input.getAction("fire1");
 
         if (!this.touchLadder) {
 
@@ -221,7 +224,7 @@ export class Player extends CollisionObject {
         }
         else {
 
-            this.canThrow = true;  
+            this.canThrow = true;
 
             this.target.y = CLIMB_SPEED * event.input.getStick().y;
             if (s == State.Pressed) {
@@ -244,7 +247,7 @@ export class Player extends CollisionObject {
     }
 
 
-    private throwRock(event : CoreEvent) : boolean {
+    private throwRock(event: CoreEvent): boolean {
 
         const ROCK_SPEED_X = 3.0;
         const ROCK_JUMP = -1.0;
@@ -274,7 +277,7 @@ export class Player extends CollisionObject {
             this.jumpTimer = 0;
 
             this.projectileCb(
-                this.pos.x + this.faceDir*6, this.pos.y-2,
+                this.pos.x + this.faceDir * 6, this.pos.y - 2,
                 this.faceDir * ROCK_SPEED_X, ROCK_JUMP, true, 0, true);
 
             event.audio.playSample(event.assets.getSample("throw"), 0.60);
@@ -295,7 +298,7 @@ export class Player extends CollisionObject {
     }
 
 
-    private slide(event : CoreEvent) {
+    private slide(event: CoreEvent) {
 
         const EPS = 0.25;
         const SLIDE_TIME = 20;
@@ -304,7 +307,7 @@ export class Player extends CollisionObject {
         if (!this.progress.doesValueExistInArray("items", 4))
             return false;
 
-        let s = event.input.getAction("fire2");
+        let s = event.input.getAction("fire3");
 
         if (this.sliding) {
 
@@ -319,8 +322,7 @@ export class Player extends CollisionObject {
 
         if (!this.canJump) return false;
 
-        if (event.input.getStick().y > EPS &&
-            s == State.Pressed) {
+        if (s == State.Pressed) {
 
             this.slideTimer = SLIDE_TIME;
             this.target.x = 0;
@@ -340,7 +342,7 @@ export class Player extends CollisionObject {
     }
 
 
-    private waitDownAttack(event : CoreEvent) : boolean {
+    private waitDownAttack(event: CoreEvent): boolean {
 
         if (this.downAttackWaitTimer > 0) {
 
@@ -353,7 +355,7 @@ export class Player extends CollisionObject {
     }
 
 
-    private jump(event : CoreEvent) {
+    private jump(event: CoreEvent) {
 
         const DOWN_EPS = 0.25;
 
@@ -365,10 +367,10 @@ export class Player extends CollisionObject {
 
         const FLAP_GRAVITY = 0.5;
 
-        let s = event.input.getAction("fire2");
+        let s = event.input.getAction("fire1");
 
         if (this.progress.doesValueExistInArray("items", 1) &&
-            !this.canJump && 
+            !this.canJump &&
             !this.spinning &&
             event.input.getStick().y > DOWN_EPS &&
             s == State.Pressed) {
@@ -387,8 +389,8 @@ export class Player extends CollisionObject {
         }
 
         if (this.jumpTimer <= 0 &&
-            (this.jumpMargin > 0 || 
-            (!this.doubleJump && this.progress.doesValueExistInArray("items", 6))) &&
+            (this.jumpMargin > 0 ||
+                (!this.doubleJump && this.progress.doesValueExistInArray("items", 6))) &&
             s == State.Pressed) {
 
             if (this.jumpMargin > 0) {
@@ -409,16 +411,16 @@ export class Player extends CollisionObject {
             this.canJump = false;
             this.jumpReleased = false;
         }
-        else if (this.jumpTimer > 0 && 
+        else if (this.jumpTimer > 0 &&
             (s & State.DownOrPressed) == 0) {
 
             this.jumpTimer = 0;
         }
 
         if (!this.flapping &&
-            !this.jumpReleased && 
+            !this.jumpReleased &&
             (s & State.DownOrPressed) == 0) {
-            
+
             this.jumpReleased = true;
         }
 
@@ -428,7 +430,7 @@ export class Player extends CollisionObject {
             this.progress.doesValueExistInArray("items", 5) &&
             this.jumpReleased &&
             this.jumpTimer <= 0 &&
-            (!this.progress.doesValueExistInArray("items", 6) || this.doubleJump) && 
+            (!this.progress.doesValueExistInArray("items", 6) || this.doubleJump) &&
             (s & State.DownOrPressed) == 1;
         if (this.flapping) {
 
@@ -440,16 +442,16 @@ export class Player extends CollisionObject {
     }
 
 
-    private spin(event : CoreEvent) : boolean {
+    private spin(event: CoreEvent): boolean {
 
         if (this.climbing || this.throwing || this.downAttacking ||
             this.downAttackWaitTimer > 0) return false;
 
-        
-        if (this.spinning) 
+
+        if (this.spinning)
             return true;
-        
-        let s = event.input.getAction("fire3");    
+
+        let s = event.input.getAction("fire2");
         if (!this.spinning && this.canSpin &&
             s == State.Pressed) {
 
@@ -466,12 +468,12 @@ export class Player extends CollisionObject {
 
             return true;
         }
-        
+
         return false;
     }
- 
 
-    private control(event : CoreEvent) {
+
+    private control(event: CoreEvent) {
 
         const BASE_FRICTION_Y = 0.15;
         const MOVE_SPEED = 0.75;
@@ -515,10 +517,8 @@ export class Player extends CollisionObject {
         this.jump(event);
 
         this.running = this.progress.doesValueExistInArray("items", 0) &&
-            Math.abs(this.target.x) > EPS &&
-            ((event.input.getAction("fire1") & State.DownOrPressed) == 1);
+            Math.abs(this.target.x) > EPS;
         if (this.running) {
-
             this.target.x *= RUN_MOD;
         }
 
@@ -536,7 +536,7 @@ export class Player extends CollisionObject {
     }
 
 
-    private animate(event : CoreEvent) {
+    private animate(event: CoreEvent) {
 
         const EPS = 0.01;
         const JUMP_EPS = 0.75;
@@ -549,21 +549,21 @@ export class Player extends CollisionObject {
         const SYMBOL_SPEED = 16;
         const SWIM_SPEED = 8;
 
-        let animSpeed : number;
-        let frame : number;
-        let row : number;
+        let animSpeed: number;
+        let frame: number;
+        let row: number;
 
         this.sprActionSymbol.animate(this.actionSymbolId, 0, 1, SYMBOL_SPEED, event.step);
 
         let oldFrame = this.sprSpin.getColumn();
-        let s = event.input.getAction("fire3");
+        let s = event.input.getAction("fire2");
         if (this.spinning) {
 
             this.sprSpin.animate(0, 0, 7, SPIN_SPEED, event.step);
             if (oldFrame > this.sprSpin.getColumn()) {
 
-                if ((++ this.spinCount) >= SPIN_MAX || (s & State.DownOrPressed) == 0) {
-                    
+                if ((++this.spinCount) >= SPIN_MAX || (s & State.DownOrPressed) == 0) {
+
                     this.spinning = false;
                     this.spinCount = 0;
                 }
@@ -602,7 +602,7 @@ export class Player extends CollisionObject {
                     this.spr.setFrame(this.climbFrame, 2);
                 else
                     this.spr.setFrame(0, 0);
-                
+
                 this.throwing = false;
             }
             else {
@@ -663,7 +663,7 @@ export class Player extends CollisionObject {
                 frame = 2;
             else if (this.speed.y < -JUMP_EPS)
                 frame = 0;
-            
+
             if (this.flapping)
                 frame = 3;
 
@@ -680,7 +680,7 @@ export class Player extends CollisionObject {
     }
 
 
-    private updateJump(event : CoreEvent) {
+    private updateJump(event: CoreEvent) {
 
         const DOUBLE_JUMP_SPEED_DELTA = -0.30;
         const DOUBLE_JUMP_MIN = -1.25;
@@ -724,7 +724,7 @@ export class Player extends CollisionObject {
     }
 
 
-    private updateDust(event : CoreEvent) {
+    private updateDust(event: CoreEvent) {
 
         const DUST_GEN_TIME_BASE = 8;
         const DUST_GEN_TIME_ROCKET = 6;
@@ -751,7 +751,7 @@ export class Player extends CollisionObject {
         let genTime = DUST_GEN_TIME_BASE / Math.abs(this.speed.x);
         let speed = new Vector2();
         let pos = new Vector2(
-            this.pos.x - 2 * dir, 
+            this.pos.x - 2 * dir,
             this.pos.y + 6);
 
         if (rocketActive) {
@@ -766,7 +766,7 @@ export class Player extends CollisionObject {
 
             nextObject(this.dust, Dust)
                 .spawn(pos.x, pos.y, DUST_ANIM_SPEED, speed,
-                rocketActive ? 1 : 0);
+                    rocketActive ? 1 : 0);
 
             if (rocketActive) {
 
@@ -791,8 +791,8 @@ export class Player extends CollisionObject {
     }
 
 
-    protected preMovementEvent(event : CoreEvent) {
-
+    protected preMovementEvent(event: CoreEvent) {
+        Player.instance = this;
         const INV_TIME = 60;
 
         this.takeCameraBorderCollision = this.isInFinalArea || this.knockbackTimer > 0;
@@ -807,13 +807,13 @@ export class Player extends CollisionObject {
 
                     this.startDeath(event);
                 }
-                else {    
+                else {
 
                     this.invulnerabilityTimer = INV_TIME;
                 }
             }
             this.resetFlags();
-            
+
             return;
         }
 
@@ -830,7 +830,7 @@ export class Player extends CollisionObject {
     }
 
 
-    protected die(event : CoreEvent) : boolean {
+    protected die(event: CoreEvent): boolean {
 
         const DEATH_TIME = 90;
         const ANIM_SPEED = 4;
@@ -846,7 +846,7 @@ export class Player extends CollisionObject {
     }
 
 
-    private resetProperties(stop : boolean) {
+    private resetProperties(stop: boolean) {
 
         if (stop) {
 
@@ -870,18 +870,18 @@ export class Player extends CollisionObject {
     }
 
 
-    private markRoomVisited(x : number, y : number, stage : Stage) {
+    private markRoomVisited(x: number, y: number, stage: Stage) {
 
-        let w = Math.floor(stage.width/10);
+        let w = Math.floor(stage.width / 10);
         x = negMod(x, w);
 
-        this.progress.addValueToArray("roomVisited", y*w + x, true);
+        this.progress.addValueToArray("roomVisited", y * w + x, true);
     }
 
 
-    public stageEvent(stage : Stage, camera : Camera) {
+    public stageEvent(stage: Stage, camera: Camera) {
 
-        let cp : Vector2;
+        let cp: Vector2;
 
         if (this.hasTeleported) {
 
@@ -893,7 +893,7 @@ export class Player extends CollisionObject {
     }
 
 
-    public cameraMovement(camera : Camera, event : CoreEvent) {
+    public cameraMovement(camera: Camera, event: CoreEvent) {
 
         const MOVE_SPEED = 12;
 
@@ -907,11 +907,11 @@ export class Player extends CollisionObject {
     }
 
 
-    public cameraEvent(camera : Camera, stage : Stage, event : CoreEvent) {
+    public cameraEvent(camera: Camera, stage: Stage, event: CoreEvent) {
 
-        const CAMERA_MOVE_SPEED = 1.0/20.0;
+        const CAMERA_MOVE_SPEED = 1.0 / 20.0;
         const HIT_RANGE_X = 4;
-        const HIT_RANGE_Y = 4; 
+        const HIT_RANGE_Y = 4;
         const TOP_EXTRA_MARGIN = 1;
 
         let p = camera.getPosition();
@@ -934,11 +934,11 @@ export class Player extends CollisionObject {
 
         let extraMargin = this.climbing ? 0 : TOP_EXTRA_MARGIN;
 
-        if (this.pos.x - HIT_RANGE_X < x1) 
+        if (this.pos.x - HIT_RANGE_X < x1)
             dirx = -1;
         else if (this.pos.x + HIT_RANGE_X > x2)
             dirx = 1;
-        else if (this.pos.y - HIT_RANGE_Y + extraMargin < y1 && !this.downAttacking) 
+        else if (this.pos.y - HIT_RANGE_Y + extraMargin < y1 && !this.downAttacking)
             diry = -1;
         else if (this.pos.y + HIT_RANGE_Y > y2)
             diry = 1;
@@ -946,7 +946,7 @@ export class Player extends CollisionObject {
         if (this.isInFinalArea)
             dirx = 0;
 
-        let cp : Vector2;
+        let cp: Vector2;
         if (dirx != 0 || diry != 0) {
 
             camera.move(dirx, diry, CAMERA_MOVE_SPEED);
@@ -960,7 +960,7 @@ export class Player extends CollisionObject {
     }
 
 
-    public preDraw(canvas : Canvas) {
+    public preDraw(canvas: Canvas) {
 
         for (let d of this.dust) {
 
@@ -969,7 +969,7 @@ export class Player extends CollisionObject {
     }
 
 
-    private drawDeath(canvas : Canvas) {
+    private drawDeath(canvas: Canvas) {
 
         const BALL_SPEED = 1.0;
         const BALL_COUNT = 8;
@@ -977,23 +977,23 @@ export class Player extends CollisionObject {
         let bmp = canvas.assets.getBitmap("player");
 
         let r = this.deathTimer * BALL_SPEED;
-        let x : number;
-        let y : number;
+        let x: number;
+        let y: number;
 
         let angle = 0;
-        for (let i = 0; i < BALL_COUNT; ++ i) {
+        for (let i = 0; i < BALL_COUNT; ++i) {
 
-            angle = Math.PI*2 / BALL_COUNT * i;
+            angle = Math.PI * 2 / BALL_COUNT * i;
 
             x = this.pos.x + this.center.x + Math.cos(angle) * r;
             y = this.pos.y + this.center.y + Math.sin(angle) * r;
 
-            canvas.drawSprite(this.spr, bmp, Math.floor(x)-8, Math.floor(y)-8);
+            canvas.drawSprite(this.spr, bmp, Math.floor(x) - 8, Math.floor(y) - 8);
         }
     }
 
 
-    public draw(canvas : Canvas) {
+    public draw(canvas: Canvas) {
 
         if (!this.exist) return;
 
@@ -1003,8 +1003,8 @@ export class Player extends CollisionObject {
             return;
         }
 
-        let px = Math.round(this.pos.x - this.spr.width/2);
-        let py = Math.round(this.pos.y - this.spr.height/2);
+        let px = Math.round(this.pos.x - this.spr.width / 2);
+        let py = Math.round(this.pos.y - this.spr.height / 2);
 
         if (this.showActionSymbol) {
 
@@ -1015,32 +1015,32 @@ export class Player extends CollisionObject {
 
         if (!this.exist ||
             (this.invulnerabilityTimer > 0 &&
-            Math.floor(this.invulnerabilityTimer/4) % 2 == 0)) 
+                Math.floor(this.invulnerabilityTimer / 4) % 2 == 0))
             return;
 
         if (this.spinning) {
 
-            canvas.drawSprite(this.sprSpin, 
-                canvas.assets.getBitmap("spin"), 
-                px-8, py, this.flip);
+            canvas.drawSprite(this.sprSpin,
+                canvas.assets.getBitmap("spin"),
+                px - 8, py, this.flip);
         }
         else {
 
-            canvas.drawSprite(this.spr, 
-                canvas.assets.getBitmap("player"), 
+            canvas.drawSprite(this.spr,
+                canvas.assets.getBitmap("player"),
                 px, py, this.flip);
         }
 
         if (this.holdingItem) {
 
-            canvas.drawBitmapRegion(canvas.assets.getBitmap("items"), 
+            canvas.drawBitmapRegion(canvas.assets.getBitmap("items"),
                 this.itemID * 16, 0, 16, 16,
                 px, py - 17);
         }
     }
 
 
-    protected verticalCollisionEvent(dir : number, event : CoreEvent) {
+    protected verticalCollisionEvent(dir: number, event: CoreEvent) {
 
         const JUMP_MARGIN = 12;
         const HIT_WAIT = 30;
@@ -1078,24 +1078,24 @@ export class Player extends CollisionObject {
     }
 
 
-    protected wallCollisionEvent(dir : number, event : CoreEvent) {
+    protected wallCollisionEvent(dir: number, event: CoreEvent) {
 
         this.sliding = false;
         this.slideTimer = 0;
     }
 
 
-    public ladderCollision(x : number, y : number, w : number, h : number, 
-        ladderTop : boolean, event : CoreEvent) : boolean {
+    public ladderCollision(x: number, y: number, w: number, h: number,
+        ladderTop: boolean, event: CoreEvent): boolean {
 
         if (boxOverlay(this.pos, this.center, this.collisionBox, x, y, w, h)) {
 
-            this.climbX = x + w/2;
+            this.climbX = x + w / 2;
             this.touchLadder = !ladderTop || !this.climbing;
             this.isLadderTop = this.isLadderTop || ladderTop;
 
             if (!this.climbing) {
-                
+
                 this.showActionSymbol = true;
                 this.actionSymbolId = ladderTop ? 1 : 0;
             }
@@ -1106,8 +1106,8 @@ export class Player extends CollisionObject {
     }
 
 
-    public breakCollision(x : number, y : number, w : number, h : number, 
-        level : number, event : CoreEvent) : boolean {
+    public breakCollision(x: number, y: number, w: number, h: number,
+        level: number, event: CoreEvent): boolean {
 
         const Y_OFF = -4;
         const HEAD_TOUCH_HEIGHT = 8;
@@ -1120,16 +1120,16 @@ export class Player extends CollisionObject {
         if (this.spinning &&
             this.progress.doesValueExistInArray("items", 8)) {
 
-            return boxOverlay(this.pos, new Vector2(0, -this.spinHitbox.y/2), 
+            return boxOverlay(this.pos, new Vector2(0, -this.spinHitbox.y / 2),
                 this.spinHitbox, x, y, w, h);
         }
 
         if (this.speed.y < 0 &&
             this.progress.doesValueExistInArray("items", 10)) {
 
-            if (boxOverlay(this.pos, 
-                new Vector2(0, -this.collisionBox.y/2), 
-                new Vector2(this.collisionBox.x, HEAD_TOUCH_HEIGHT), 
+            if (boxOverlay(this.pos,
+                new Vector2(0, -this.collisionBox.y / 2),
+                new Vector2(this.collisionBox.x, HEAD_TOUCH_HEIGHT),
                 x, y, w, h)) {
 
                 this.speed.y = 0;
@@ -1147,7 +1147,7 @@ export class Player extends CollisionObject {
 
 
 
-    private hurt(dir : number, event : CoreEvent) {
+    private hurt(dir: number, event: CoreEvent) {
 
         const KNOCKBACK_TIME = 30;
         const KNOCKBACK_SPEED = 2.0;
@@ -1155,23 +1155,23 @@ export class Player extends CollisionObject {
         this.spr.setFrame(4, 3);
         this.knockbackTimer = KNOCKBACK_TIME;
 
-        if (dir == 0) 
+        if (dir == 0)
             dir = -this.faceDir;
-            
+
         this.target.x = 0;
         this.speed.x = KNOCKBACK_SPEED * dir;
 
         this.resetProperties(false);
 
-        this.health = Math.max(0, this.health-1);
+        this.health = Math.max(0, this.health - 1);
 
         event.audio.playSample(event.assets.getSample("hurt"), 0.60);
     }
-    
 
-    public hurtCollision(x : number, y : number, 
-        w : number, h : number, dir : number, 
-        event : CoreEvent) : boolean {
+
+    public hurtCollision(x: number, y: number,
+        w: number, h: number, dir: number,
+        event: CoreEvent): boolean {
 
         if (this.dying ||
             this.invulnerabilityTimer > 0 ||
@@ -1187,11 +1187,11 @@ export class Player extends CollisionObject {
     }
 
 
-    public windCollision(x : number, y : number, w : number, h : number, 
-        event : CoreEvent) : boolean {
+    public windCollision(x: number, y: number, w: number, h: number,
+        event: CoreEvent): boolean {
 
         const SPEED_DOWN = -0.5;
-        const MIN_SPEED = -3.0; 
+        const MIN_SPEED = -3.0;
 
         if (boxOverlay(this.pos, this.center, this.hitbox, x, y, w, h)) {
 
@@ -1206,8 +1206,8 @@ export class Player extends CollisionObject {
     }
 
 
-    public waterCollision(x : number, y : number, w : number, h : number, 
-        top : boolean, event : CoreEvent) : boolean {
+    public waterCollision(x: number, y: number, w: number, h: number,
+        top: boolean, event: CoreEvent): boolean {
 
         const UP_SPEED = -0.25;
 
@@ -1236,7 +1236,7 @@ export class Player extends CollisionObject {
     }
 
 
-    public projectileCollision(p : Projectile, event : CoreEvent) : boolean {
+    public projectileCollision(p: Projectile, event: CoreEvent): boolean {
 
         if (p.isFriendly() ||
             p.isDying() || !p.doesExist() ||
@@ -1244,7 +1244,7 @@ export class Player extends CollisionObject {
             this.dying ||
             this.invulnerabilityTimer > 0 ||
             this.knockbackTimer > 0) return false;
-        
+
         if (this.overlayObject(p)) {
 
             this.hurt(Math.sign(this.pos.x - p.getPos().x), event);
@@ -1256,7 +1256,7 @@ export class Player extends CollisionObject {
     }
 
 
-    public makeJump(speed : number) {
+    public makeJump(speed: number) {
 
         if (this.downAttacking) return;
 
@@ -1270,13 +1270,13 @@ export class Player extends CollisionObject {
     }
 
 
-    public checkLoop(stage : Stage) {
+    public checkLoop(stage: Stage) {
 
-        this.pos.x = negMod(this.pos.x, stage.width*16);
+        this.pos.x = negMod(this.pos.x, stage.width * 16);
     }
 
 
-    public touchGround = () : boolean => this.canJump &&
+    public touchGround = (): boolean => this.canJump &&
         !this.downAttacking &&
         this.downAttackWaitTimer <= 0 &&
         !this.throwing &&
@@ -1291,8 +1291,8 @@ export class Player extends CollisionObject {
         this.actionSymbolId = 0;
     }
 
-    
-    public setObtainItemPose(itemID : number) {
+
+    public setObtainItemPose(itemID: number) {
 
         this.stopMovement();
         this.spr.setFrame(4, 4);
@@ -1318,7 +1318,7 @@ export class Player extends CollisionObject {
     }
 
 
-    public teleportTo(pos : Vector2, setPose = true, inside = false) {
+    public teleportTo(pos: Vector2, setPose = true, inside = false) {
 
         if (setPose) {
 
@@ -1332,28 +1332,28 @@ export class Player extends CollisionObject {
     }
 
 
-    public checkSpinOverlay = (o : WeakGameObject) : boolean => 
+    public checkSpinOverlay = (o: WeakGameObject): boolean =>
         this.spinning &&
-        o.overlayObjectSpecialHitbox(this, new Vector2(0, -this.spinHitbox.y/2), 
+        o.overlayObjectSpecialHitbox(this, new Vector2(0, -this.spinHitbox.y / 2),
             this.spinHitbox);
 
 
-    public isInside = () : boolean => this.inside;
+    public isInside = (): boolean => this.inside;
 
-    public maxHealth = () : number => this.progress.doesValueExistInArray("items", 9) ? 4 : 3;
-    public getHealth = () : number => this.health;
+    public maxHealth = (): number => this.progress.doesValueExistInArray("items", 9) ? 4 : 3;
+    public getHealth = (): number => this.health;
 
-    public isDownAttacking = () : boolean => this.downAttacking;
-    public isSpinning = () : boolean => this.spinning;
+    public isDownAttacking = (): boolean => this.downAttacking;
+    public isSpinning = (): boolean => this.spinning;
 
 
-    public getActiveCheckpointReference = () : SavePoint => this.activeCheckpoint;
-    public setActiveCheckpointReference(p : SavePoint) {
+    public getActiveCheckpointReference = (): SavePoint => this.activeCheckpoint;
+    public setActiveCheckpointReference(p: SavePoint) {
 
         this.activeCheckpoint = p;
     }
 
-    public resetActiveCheckpointReference = () : void => this.activeCheckpoint = null;
+    public resetActiveCheckpointReference = (): void => this.activeCheckpoint = null;
 
 
     public maximizeHealth() {
@@ -1395,7 +1395,7 @@ export class Player extends CollisionObject {
 
 
     // "kill" is reserved...
-    public startDeath(event : CoreEvent) {
+    public startDeath(event: CoreEvent) {
 
         if (this.dying) return;
 
@@ -1414,5 +1414,5 @@ export class Player extends CollisionObject {
     }
 
 
-    public isSwimming = () : boolean => this.touchWater;
+    public isSwimming = (): boolean => this.touchWater;
 }

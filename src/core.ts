@@ -75,24 +75,24 @@ export interface Scene {
 export class Core {
 
     private canvas: Canvas;
-    private event: CoreEvent;
+    public event: CoreEvent;
     private transition: TransitionEffectManager;
     private input: InputListener;
     private assets: AssetManager;
     private audio: AudioPlayer;
     public readonly archipelago: ArchipelagoClient
 
-    private activeScene: Scene;
+    public activeScene: Scene;
     private activeSceneType: Function;
 
     private timeSum: number;
     private oldTime: number;
 
     private initialized: boolean;
+    private static instance: Core;
 
 
     constructor(canvasWidth: number, canvasHeight: number, frameSkip = 0) {
-
         this.audio = new AudioPlayer();
         this.input = new InputListener();
         this.assets = new AssetManager(this.audio);
@@ -113,8 +113,10 @@ export class Core {
     }
 
 
-    private drawLoadingScreen(canvas: Canvas) {
+    public static getInstance(): Core { return Core.instance; }
 
+
+    private drawLoadingScreen(canvas: Canvas) {
         const BAR_BORDER_WIDTH = 1;
 
         let barWidth = canvas.width / 4;
@@ -146,7 +148,7 @@ export class Core {
 
 
     private loop(ts: number, onLoad: ((event: CoreEvent) => void)) {
-
+        Core.instance = this;
         const MAX_REFRESH_COUNT = 5;
         const FRAME_WAIT = 16.66667 * this.event.step;
 

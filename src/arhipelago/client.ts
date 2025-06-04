@@ -1,4 +1,9 @@
-import { Client, defaultConnectionOptions } from "archipelago.js";
+import { Client, Item } from "archipelago.js";
+import { Player } from "../player";
+import { Core, CoreEvent, Scene } from '../core';
+import { GameScene } from "../game";
+import { MessageBox } from "../messagebox";
+import { HintBox } from "../hintbox";
 
 
 export class ArchipelagoClient {
@@ -12,8 +17,6 @@ export class ArchipelagoClient {
         return ArchipelagoClient.instance;
     }
 
-
-
     public client: Client;
 
     constructor() {
@@ -25,7 +28,7 @@ export class ArchipelagoClient {
             console.log(content);
         });
 
-        this.client.messages.on()
+        this.client.items.on("itemsReceived", this.onReceive);
 
         document.getElementById('input-chat').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -37,7 +40,6 @@ export class ArchipelagoClient {
         });
 
         document.getElementById('connect').addEventListener('click', (e) => {
-            console.log('ahaaa');
             this.login(
                 (document.getElementById('input-host') as HTMLInputElement).value,
                 (document.getElementById('input-port') as HTMLInputElement).value,
@@ -66,5 +68,64 @@ export class ArchipelagoClient {
         this.showId('cdiv', value);
         this.showId('input-chat', value);
     }
+
+    public onReceive(items: Item[]) {
+        const player: Player = Player.getInstance();
+        for (const item of items) {
+            switch (item.id) {
+                case 13:
+                    player.progress.increaseNumberProperty("stars");
+                    break;
+                case 14:
+                    player.progress.increaseNumberProperty("kills");
+                    break;
+                default:
+                    if (!player.progress.doesValueExistInArray("items", item.id)) {
+                        this.receiveEquipment(item.id)
+                    }
+                    break;
+            }
+        }
+    }
+
+    public receiveEquipment(id: int) {
+        const event: CoreEvent = Core.getInstance().event;
+        let text = <Array<string>>event.localization.findValue(["chest", String(id)]);
+
+        if (text == null) return;
+
+        const HINT_ID = [5, 6, -1, 7, 8, 9, -1, -1, -1, -1, -1, 10];
+        const WAIT_TIME = 45;
+
+        event.audio.playSample(event.assets.getSample("item"), 0.40);
+
+        event.audio.pauseMusic();
+
+        const scene: Scene = Core.getInstance().activeScene;
+        if (scene instanceof GameScene) {
+            const message: MessageBox = (scene as GameScene).message;
+            const hintbox: HintBox = (scene as GameScene).hintbox;
+            message.addMessages(text);
+
+            message.activate(WAIT_TIME, false, event => {
+
+                if (id < HINT_ID.length && HINT_ID[id] >= 0) {
+
+                    hintbox.setMessage(event.localization.findValue(["hints", String(HINT_ID[id])]));
+                    hintbox.activate();
+                }
+
+                event.audio.resumeMusic();
+            });
+        }
+
+        const player: Player = Player.getInstance();
+        player.setObtainItemPose(id);
+        player.progress.addValueToArray("items", id, true);
+    }
 }
 
+
+
+
+export const Equipment: string[] = ["Running boots", "Nice helmet", "Master key", "Endless bag of tennis balls", "Lubricant", "Old rocket pack", "Rocket expansion", "Extra greasy hamburger", "Power glove", "Extra heart", "Poison mushroom of awesome powers", "Magic map", "Brain"];

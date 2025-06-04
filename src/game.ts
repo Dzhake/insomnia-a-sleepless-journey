@@ -21,7 +21,7 @@ export const INSIDE_THEME_VOLUME = 0.80;
 export const FINAL_THEME_VOLUME = 0.40;
 
 
-export const playTheme = (event : CoreEvent, inside = false, finalArea = false) => {
+export const playTheme = (event: CoreEvent, inside = false, finalArea = false) => {
 
     let trackName = "theme";
     let vol = THEME_VOLUME;
@@ -36,7 +36,7 @@ export const playTheme = (event : CoreEvent, inside = false, finalArea = false) 
         trackName = "inside";
         vol = INSIDE_THEME_VOLUME;
     }
-        
+
 
     event.audio.fadeInMusic(event.assets.getSample(trackName), vol, 1000);
 }
@@ -45,23 +45,23 @@ export const playTheme = (event : CoreEvent, inside = false, finalArea = false) 
 export class GameScene implements Scene {
 
 
-    private stage : Stage;
-    private camera : Camera;
-    private objects : ObjectManager;
-    private message : MessageBox;
-    private progress : ProgressManager;
-    private worldMap : WorldMap;
-    private saveManager : SaveManager;
-    private hintbox : HintBox;
+    private stage: Stage;
+    private camera: Camera;
+    private objects: ObjectManager;
+    public message: MessageBox;
+    private progress: ProgressManager;
+    private worldMap: WorldMap;
+    private saveManager: SaveManager;
+    public hintbox: HintBox;
 
-    private sprHeart : Sprite;
+    private sprHeart: Sprite;
 
-    private pauseMenu : Menu;
+    private pauseMenu: Menu;
 
-    private isFinalArea : boolean;
+    private isFinalArea: boolean;
 
 
-    constructor(param : any, event : CoreEvent) {
+    constructor(param: any, event: CoreEvent) {
 
         this.message = new MessageBox(event);
         this.progress = new ProgressManager();
@@ -70,8 +70,8 @@ export class GameScene implements Scene {
 
         this.camera = new Camera(0, 0, 160, 144);
         this.stage = new Stage(this.camera, this.progress, event);
-        this.objects = new ObjectManager(this.stage, this.camera, 
-            this.message, this.progress, 
+        this.objects = new ObjectManager(this.stage, this.camera,
+            this.message, this.progress,
             this.saveManager, this.hintbox, event,
             event => this.enterFinalArea(event));
         this.worldMap = new WorldMap(this.stage, this.progress, event);
@@ -79,7 +79,7 @@ export class GameScene implements Scene {
         this.objects.cameraCheck(this.camera);
 
         let p = this.camera.getRealPosition();
-        this.progress.addValueToArray("roomVisited", (p.y * Math.floor(this.stage.width/10) + p.x) | 0, true);
+        this.progress.addValueToArray("roomVisited", (p.y * Math.floor(this.stage.width / 10) + p.x) | 0, true);
 
         this.sprHeart = new Sprite(16, 16);
 
@@ -89,84 +89,84 @@ export class GameScene implements Scene {
         this.pauseMenu = new Menu(
             [
                 new MenuButton(loc.findValue(["pauseMenu", "0"]),
-                event => {
-                    
-                    this.pauseMenu.deactivate();
-                    event.audio.resumeMusic();
-                }),
+                    event => {
+
+                        this.pauseMenu.deactivate();
+                        event.audio.resumeMusic();
+                    }),
 
                 new MenuButton(loc.findValue(["pauseMenu", "1"]),
-                event => {
+                    event => {
 
-                    this.message.addMessages(event.localization.findValue(["respawnAtStart"]));
-                    this.message.activate(0, true, event => {
+                        this.message.addMessages(event.localization.findValue(["respawnAtStart"]));
+                        this.message.activate(0, true, event => {
 
-                        event.audio.resumeMusic();
-                        this.objects.killPlayer(event, true);
-                        this.pauseMenu.deactivate();
-                    });
-                }),
+                            event.audio.resumeMusic();
+                            this.objects.killPlayer(event, true);
+                            this.pauseMenu.deactivate();
+                        });
+                    }),
 
                 new MenuButton(loc.findValue(["pauseMenu", "2"]),
-                event => {
+                    event => {
 
-                    this.message.addMessages(event.localization.findValue(["respawn"]));
-                    this.message.activate(0, true, event => {
+                        this.message.addMessages(event.localization.findValue(["respawn"]));
+                        this.message.activate(0, true, event => {
 
-                        event.audio.resumeMusic();
+                            event.audio.resumeMusic();
 
-                        this.objects.killPlayer(event);
-                        this.pauseMenu.deactivate();
-                    });
-                }),
+                            this.objects.killPlayer(event);
+                            this.pauseMenu.deactivate();
+                        });
+                    }),
 
                 new MenuButton(loc.findValue(["pauseMenu", "3"]),
-                event => {
+                    event => {
 
-                    if (!this.isFinalArea) {
+                        if (!this.isFinalArea) {
 
-                        saveGame(this.message, this.saveManager, event);
-                    }
-                    else {
+                            saveGame(this.message, this.saveManager, event);
+                        }
+                        else {
 
-                        this.message.addMessages([event.localization.findValue(["cannotSave"])]);
-                        this.message.activate();
-                    }
-                }),
+                            this.message.addMessages([event.localization.findValue(["cannotSave"])]);
+                            this.message.activate();
+                        }
+                    }),
 
                 new MenuButton(loc.findValue(["pauseMenu", "4"]),
-                event => {
+                    event => {
 
-                    if (this.activateMap(() => {
+                        if (this.activateMap(() => {
                             this.pauseMenu.activate(3);
                         }, event)) {
 
-                        this.pauseMenu.deactivate();
-                        event.audio.resumeMusic();
-                    }
-                }),
-/*
-                new MenuButton("DEBUG", 
-                event => {
-
-                    this.debug();
-                    event.audio.resumeMusic();
-                }),
-*/
+                            this.pauseMenu.deactivate();
+                            event.audio.resumeMusic();
+                        }
+                    }),
+                /*
+                                new MenuButton("DEBUG", 
+                                event => {
+                
+                                    this.debug();
+                                    event.audio.resumeMusic();
+                                }),
+                */
                 new MenuButton(loc.findValue(["pauseMenu", "5"]),
-                event => {
+                    event => {
 
-                    this.message.addMessages(loc.findValue(["quitGame"]));
-                    this.message.activate(0, true, event => {
+                        this.message.addMessages(loc.findValue(["quitGame"]));
+                        this.message.activate(0, true, event => {
 
-                        this.pauseMenu.deactivate();
-                        event.transition.activate(true, TransitionEffectType.BoxVertical,
-                            1.0/30.0, event => {
+                            this.pauseMenu.deactivate();
+                            event.transition.activate(true, TransitionEffectType.BoxVertical,
+                                1.0 / 30.0, event => {
 
-                                event.changeScene(TitleScreen);
-                            });
-                    });
-                })
+                                    event.changeScene(TitleScreen);
+                                });
+                        });
+                    })
             ]
         );
 
@@ -176,14 +176,14 @@ export class GameScene implements Scene {
         }
 
         playTheme(event, this.objects.isPlayerInside(), this.isFinalArea);
-        
+
         this.isFinalArea = false;
     }
 
 
     private debug() {
 
-        for (let i = 0; i <= 12; ++ i) {
+        for (let i = 0; i <= 12; ++i) {
 
             this.progress.addValueToArray("items", i, true);
         }
@@ -199,7 +199,7 @@ export class GameScene implements Scene {
         this.progress.setNumberProperty("kills", 99);
         this.progress.setNumberProperty("stars", 99);
 
-        for (let i = 0; i < 99; ++ i) {
+        for (let i = 0; i < 99; ++i) {
 
             this.progress.addValueToArray("enemiesKilled", i);
             this.progress.addValueToArray("starsCollected", i);
@@ -207,13 +207,13 @@ export class GameScene implements Scene {
     }
 
 
-    private enterFinalArea(event : CoreEvent) {
+    private enterFinalArea(event: CoreEvent) {
 
         this.isFinalArea = true;
 
         this.stage = new Stage(this.camera, this.progress, event, true);
-        this.objects = new ObjectManager(this.stage, this.camera, 
-            this.message, this.progress, 
+        this.objects = new ObjectManager(this.stage, this.camera,
+            this.message, this.progress,
             this.saveManager, this.hintbox, event);
         this.worldMap = new WorldMap(this.stage, this.progress, event);
 
@@ -227,7 +227,7 @@ export class GameScene implements Scene {
 
     private loadGame() {
 
-        let data : any;
+        let data: any;
 
         try {
 
@@ -237,7 +237,7 @@ export class GameScene implements Scene {
                 return;
             }
         }
-        catch(e) {
+        catch (e) {
 
             console.log(e);
             return;
@@ -253,7 +253,7 @@ export class GameScene implements Scene {
     }
 
 
-    private activateMap(cb : (event : CoreEvent) => void, event : CoreEvent): boolean {
+    private activateMap(cb: (event: CoreEvent) => void, event: CoreEvent): boolean {
 
         if (this.isFinalArea) {
 
@@ -275,18 +275,18 @@ export class GameScene implements Scene {
     }
 
 
-    private updateHeart(event : CoreEvent) {
+    private updateHeart(event: CoreEvent) {
 
         const HEARTBEAT_WAIT = 50;
         const HEARTBEAT_TIME = 10;
 
-        this.sprHeart.animate(0, 0, 1, 
+        this.sprHeart.animate(0, 0, 1,
             this.sprHeart.getColumn() == 0 ? HEARTBEAT_WAIT : HEARTBEAT_TIME,
             event.step);
     }
 
 
-    public update(event : CoreEvent) {
+    public update(event: CoreEvent) {
 
         this.hintbox.update(this.camera, event);
 
@@ -331,7 +331,7 @@ export class GameScene implements Scene {
 
             event.audio.playSample(event.assets.getSample("pause"), 0.40);
 
-            this.activateMap(() => {}, event);
+            this.activateMap(() => { }, event);
             return;
         }
 
@@ -347,7 +347,7 @@ export class GameScene implements Scene {
     }
 
 
-    private drawHUD(canvas : Canvas, drawTarget = false) {
+    private drawHUD(canvas: Canvas, drawTarget = false) {
 
         const X_OFF = -8;
 
@@ -367,36 +367,36 @@ export class GameScene implements Scene {
         if (drawTarget)
             s += "/" + this.objects.getEnemyCount();
 
-        let shift = (s.length-1) * (-X_OFF);
+        let shift = (s.length - 1) * (-X_OFF);
 
-        canvas.drawText(font, "=", canvas.width-36 - shift, 1, 0, 0);
-        canvas.drawText(font, ";" + s, canvas.width-36 + 11 - shift, 1, X_OFF, 0);
+        canvas.drawText(font, "=", canvas.width - 36 - shift, 1, 0, 0);
+        canvas.drawText(font, ";" + s, canvas.width - 36 + 11 - shift, 1, X_OFF, 0);
 
         let health = this.objects.getPlayerHealth();
         let maxHealth = this.objects.getPlayerMaxHealth();
 
         let sy = 0;
         let sx = 0;
-        for (let i = 0; i < maxHealth; ++ i) {
+        for (let i = 0; i < maxHealth; ++i) {
 
             sx = 0;
             sy = 16;
 
             if (i < health) {
 
-                if (i == health-1)
+                if (i == health - 1)
                     sx = this.sprHeart.getColumn() * 16;
 
                 sy = 0;
             }
 
             canvas.drawBitmapRegion(bmpHearts, sx, sy, 16, 16,
-                -1 + i*12, canvas.height-15);
+                -1 + i * 12, canvas.height - 15);
         }
     }
 
 
-    public redraw(canvas : Canvas) {
+    public redraw(canvas: Canvas) {
 
         canvas.moveTo();
         canvas.clear(85, 85, 85);
@@ -419,7 +419,7 @@ export class GameScene implements Scene {
         this.hintbox.draw(canvas);
         this.worldMap.draw(canvas);
 
-        if (!this.pauseMenu.isActive()) 
+        if (!this.pauseMenu.isActive())
             this.message.draw(canvas);
 
         if (this.pauseMenu.isActive()) {
@@ -433,7 +433,7 @@ export class GameScene implements Scene {
             }
             else {
 
-                this.pauseMenu.draw(canvas, 0, 0, 0, 10, true); 
+                this.pauseMenu.draw(canvas, 0, 0, 0, 10, true);
             }
 
             this.drawHUD(canvas, true);
@@ -441,5 +441,5 @@ export class GameScene implements Scene {
     }
 
 
-    public dispose = () : any => <any> null;
+    public dispose = (): any => <any>null;
 }
