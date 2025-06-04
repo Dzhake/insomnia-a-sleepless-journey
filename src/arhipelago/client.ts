@@ -48,7 +48,7 @@ export class ArchipelagoClient {
     }
 
     public login(host: string, port: string, playerName: string, password: string) {
-        this.client.login(host + ':' + port, playerName, "insomnia-a-sleepless-journey", { password: password })
+        this.client.login(host + ':' + port, playerName, "Insomnia a sleepless journey", { password: password })
             .then(function () { console.log("Connected to the Archipelago server!"); this.showConnected(true); })
             .catch(function (e) { console.error(e); alert(e); });
     }
