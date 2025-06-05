@@ -7,6 +7,7 @@ import { ObjectManager } from "./objectmanager.ts";
 import { ProgressManager } from "./progress.ts";
 import { Stage } from "./stage.ts";
 import { Rect, Vector2 } from "./vector.ts";
+import { Player } from "./player.ts"
 
 
 export class WorldMap {
@@ -84,9 +85,8 @@ export class WorldMap {
 
         for (let i = 0; i < this.width * this.height; ++i) {
 
-            this.visited[i] = this.progress.doesValueExistInArray("roomVisited", i);
-            if (this.visited[i] ||
-                this.progress.doesValueExistInArray("items", 12)) {
+            this.visited[i] = this.progress.doesValueExistInArray("roomVisited", i) || this.progress.doesValueExistInArray("items", 12);
+            if (this.visited[i]) {
 
                 dx = i % w;
                 dy = (i / w) | 0;
@@ -99,8 +99,7 @@ export class WorldMap {
                     dx * camera.width, dy * camera.height,
                     camera.width, camera.height);
 
-                this.connections[i] = objects.getDoorConnectionInArea(
-                    dx * camera.width, dy * camera.height,
+                this.connections[i] = objects.getDoorConnectionInArea(dx * camera.width, dy * camera.height,
                     camera.width, camera.height);
             }
             else {
@@ -141,7 +140,8 @@ export class WorldMap {
 
         if (!this.active) return;
 
-        let bmp = canvas.assets.getBitmap("mapIcons");
+        const bmp = canvas.assets.getBitmap("mapIcons");
+        const minimapBmp = canvas.assets.getBitmap("minimap");
 
         canvas.setFillColor(0, 0, 0, 0.67);
         canvas.fillRect();
@@ -157,22 +157,69 @@ export class WorldMap {
         let sx: number;
 
         // Background Tiles
+        canvas.setFillColor(170, 170, 255);
+        for (let y = 0; y < this.height; ++y) {
+            for (let x = 0; x < this.width; ++x) {
+                if (!this.visited[y * this.width + x])
+                    continue;
+                canvas.fillRect(dx + x * 10, dy + y * 9, 10, 9);
+            }
+        }
+
+        // Icons
         for (let y = 0; y < this.height; ++y) {
 
             for (let x = 0; x < this.width; ++x) {
+                if (this.flickerTime < 0.5 &&
+                    x == this.pos.x && y == this.pos.y) {
 
-                if (!this.visited[y * this.width + x])
+                    canvas.drawBitmapRegion(bmp, 30, 0, 10, 9,
+                        dx + x * 10, dy + y * 9);
+                }
+
+                sx = -1;
+                if (this.stars[y * this.width + x] && this.enemies[y * this.width + x]) {
+
+                    sx = 0;
+                }
+                else if (this.stars[y * this.width + x]) {
+
+                    sx = 10;
+                }
+                else if (this.enemies[y * this.width + x]) {
+
+                    sx = 20;
+                }
+
+                if (sx >= 0) {
+
+                    canvas.drawBitmapRegion(bmp, sx, 0, 10, 9,
+                        dx + x * 10, dy + y * 9);
+                }
+            }
+        }
+
+        canvas.drawText(canvas.assets.getBitmap("fontYellow"),
+            this.loc.findValue(["worldMap"]),
+            canvas.width / 2, 8, 0, 0, true);
+
+        //map
+        if (Player.getInstance().progress.doesValueExistInArray("items", 11)) {
+            canvas.drawBitmap(minimapBmp, dx, dy);
+        }
+
+        // Background Tiles
+        for (let y = 0; y < this.height; ++y) {
+            for (let x = 0; x < this.width; ++x) {
+                if (this.visited[y * this.width + x])
                     continue;
-
-                canvas.setFillColor(170, 170, 255);
+                canvas.setFillColor(85, 85, 170);
                 canvas.fillRect(dx + x * 10, dy + y * 9, 10, 9);
 
             }
         }
 
         // Connections
-        canvas.setFillColor(0, 255, 0);
-
         let x1: number;
         let y1: number;
         let x2: number;
@@ -180,7 +227,6 @@ export class WorldMap {
 
         let connectionIndex = 0;
         for (let c of this.connections) {
-
             if (c == null)
                 continue;
 
@@ -235,44 +281,6 @@ export class WorldMap {
 
             connectionIndex++;
         }
-
-        // Icons
-        for (let y = 0; y < this.height; ++y) {
-
-            for (let x = 0; x < this.width; ++x) {
-
-                if (this.flickerTime < 0.5 &&
-                    x == this.pos.x && y == this.pos.y) {
-
-                    canvas.drawBitmapRegion(bmp, 30, 0, 10, 9,
-                        dx + x * 10, dy + y * 9);
-                }
-
-                sx = -1;
-                if (this.stars[y * this.width + x] && this.enemies[y * this.width + x]) {
-
-                    sx = 0;
-                }
-                else if (this.stars[y * this.width + x]) {
-
-                    sx = 10;
-                }
-                else if (this.enemies[y * this.width + x]) {
-
-                    sx = 20;
-                }
-
-                if (sx >= 0) {
-
-                    canvas.drawBitmapRegion(bmp, sx, 0, 10, 9,
-                        dx + x * 10, dy + y * 9);
-                }
-            }
-        }
-
-        canvas.drawText(canvas.assets.getBitmap("fontYellow"),
-            this.loc.findValue(["worldMap"]),
-            canvas.width / 2, 8, 0, 0, true);
     }
 
 

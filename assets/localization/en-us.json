@@ -112,12 +112,11 @@
         ],
         [
             "You obtain a\n\"MAGIC MAP!\"",
-            "It will show\nyou the places\nyou have vis-\nited. It also\nshows you stars\nand enemies you\nmay have missed.",
-            "Press Left\nShift to\nopen it."
+            "Map now shows\nmore details."
         ],
         [
             "You obtain a\n\"BRAIN!\"",
-            "It will show\nyou ALL the\nstars and\nenemies you\nhave not yet\nfound/killed in\nyour map.",
+            "It will show\nALL the rooms\non your map",
             "If you have\none, that\nis."
         ]
     ],
@@ -147,9 +146,6 @@
         "World Map",
         "Quit Game"
     ],
-    "noMap": [
-        "You do not\nhave a map\nyet!"
-    ],
     "saveGame": [
         "Save your\nprogress and\noverride the\nold save?"
     ],
@@ -167,7 +163,7 @@
         "Press Z to jump.",
         "Use up and down\narrow keys to\nclimb.",
         "You can kill\nsome enemies by\nstomping them.",
-        "Some enemies cannot\nbe stomped. Press\nC to spin.",
+        "Some enemies cannot\nbe stomped. Press\nX to spin.",
         "You don't need to press Z to run.",
         "Press Down + Z on\nair to air dive.",
         "Press S to throw\na tennis ball.",

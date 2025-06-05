@@ -27,97 +27,97 @@ import { Portal } from "./portal.ts";
 import { GiantChest } from "./giantchest.ts";
 
 
-export type SpawnProjectileCallback = 
-    (x : number, y : number, 
-    speedx : number, speedy : number, 
-    getGravity : boolean, id : number,
-    friendly : boolean) => void;
+export type SpawnProjectileCallback =
+    (x: number, y: number,
+        speedx: number, speedy: number,
+        getGravity: boolean, id: number,
+        friendly: boolean) => void;
 
-export type PortalCallback = (event : CoreEvent) => void;
+export type PortalCallback = (event: CoreEvent) => void;
 
 
-const objectInArea = (arr : Array<WeakGameObject>,
-    dx : number, dy : number, width : number, height : number) : boolean => {
+const objectInArea = (arr: Array<WeakGameObject>,
+    dx: number, dy: number, width: number, height: number): boolean => {
 
-    let p : Vector2;
+    let p: Vector2;
 
     for (let a of arr) {
 
-        if (!a.doesExist() || a.isDying()) 
+        if (!a.doesExist() || a.isDying())
             continue;
 
         p = a.getPos();
         if (p.x >= dx && p.y >= dy && p.x <= dx + width && p.y <= dy + height)
             return true;
     }
-    
+
     return false;
 }
 
 
 export class ObjectManager {
-    
 
-    private projectiles : Array<Projectile>;
-    private player : Player;
-    private switches : Array<Switch>;
-    private weakInteractionTargets : Array<WeakInteractionTarget>;
-    private strongInteractionTargets : Array<StrongInteractionTarget>;
-    private enemies : Array<Enemy>;
-    private doors : Array<Door>;
-    
+
+    private projectiles: Array<Projectile>;
+    private player: Player;
+    private switches: Array<Switch>;
+    private weakInteractionTargets: Array<WeakInteractionTarget>;
+    private strongInteractionTargets: Array<StrongInteractionTarget>;
+    private enemies: Array<Enemy>;
+    private doors: Array<Door>;
+
     // Refer to the weak interaction target array
-    private stars : Array<Star>;
-    private chests : Array<Chest>;
-    private checkpoints : Array<SavePoint>;
-    private hintTriggers : Array<HintTrigger>;
-    private orbs : Array<Orb>;
-    private lever : Lever;
-    private portal : Portal;
+    private stars: Array<Star>;
+    private chests: Array<Chest>;
+    private checkpoints: Array<SavePoint>;
+    private hintTriggers: Array<HintTrigger>;
+    private orbs: Array<Orb>;
+    private lever: Lever;
+    private portal: Portal;
 
-    private readonly message : MessageBox;
-    private readonly progress : ProgressManager;
-    private readonly saveManager : SaveManager;
-    private readonly hintbox : HintBox;
+    private readonly message: MessageBox;
+    private readonly progress: ProgressManager;
+    private readonly saveManager: SaveManager;
+    private readonly hintbox: HintBox;
 
-    private projectileCb : SpawnProjectileCallback;
-    private portalCb : PortalCallback;
+    private projectileCb: SpawnProjectileCallback;
+    private portalCb: PortalCallback;
 
 
-    constructor(stage : Stage, camera : Camera, message : MessageBox, 
-        progress : ProgressManager, saveManager : SaveManager, hintbox : HintBox,
-        event : CoreEvent, portalCb = <PortalCallback> (event => {})) {
-        
+    constructor(stage: Stage, camera: Camera, message: MessageBox,
+        progress: ProgressManager, saveManager: SaveManager, hintbox: HintBox,
+        event: CoreEvent, portalCb = <PortalCallback>(event => { })) {
+
         this.player = null;
 
         this.progress = progress;
         this.saveManager = saveManager;
         this.hintbox = hintbox;
-    
-        this.projectiles = new Array<Projectile> ();
-        this.projectileCb = (x : number, y : number, 
-            speedx : number, speedy : number, 
-            getGravity : boolean, id : number,
-            friendly : boolean) : void => {
+
+        this.projectiles = new Array<Projectile>();
+        this.projectileCb = (x: number, y: number,
+            speedx: number, speedy: number,
+            getGravity: boolean, id: number,
+            friendly: boolean): void => {
 
             nextObject(this.projectiles, Projectile)
                 .spawn(x, y, speedx, speedy, getGravity, id, friendly);
         };
 
-        this.switches = new Array<Switch> ();
-        this.weakInteractionTargets = new Array<WeakInteractionTarget> ();
-        this.strongInteractionTargets = new Array<StrongInteractionTarget> ();
-        this.doors = new Array<Door> ();
-        this.enemies = new Array<Enemy> ();
-        this.orbs = new Array<Orb> ();
+        this.switches = new Array<Switch>();
+        this.weakInteractionTargets = new Array<WeakInteractionTarget>();
+        this.strongInteractionTargets = new Array<StrongInteractionTarget>();
+        this.doors = new Array<Door>();
+        this.enemies = new Array<Enemy>();
+        this.orbs = new Array<Orb>();
 
         this.lever = null;
         this.portal = null;
 
-        this.stars = new Array<Star> ();
-        this.chests = new Array<Chest> ();
-        this.checkpoints = new Array<SavePoint> ();
-        this.hintTriggers = new Array<HintTrigger> ();
+        this.stars = new Array<Star>();
+        this.chests = new Array<Chest>();
+        this.checkpoints = new Array<SavePoint>();
+        this.hintTriggers = new Array<HintTrigger>();
 
         this.message = message;
 
@@ -165,7 +165,7 @@ export class ObjectManager {
                     d2.markPair(d);
                 }
             }
-        } 
+        }
     }
 
 
@@ -179,105 +179,105 @@ export class ObjectManager {
     }
 
 
-    public createPlayer(x : number, y : number, inside = false, isFinalArea = false) {
+    public createPlayer(x: number, y: number, inside = false, isFinalArea = false) {
 
-        this.player = new Player(x*16+16, y*16+8, 
+        this.player = new Player(x * 16 + 16, y * 16 + 8,
             this.projectileCb, this.progress, inside, isFinalArea);
     }
 
 
-    public addSwitch(x : number, y : number) {
+    public addSwitch(x: number, y: number) {
 
-        this.switches.push(new Switch(x*16+8, y*16+16));
+        this.switches.push(new Switch(x * 16 + 8, y * 16 + 16));
     }
 
 
-    public addStar(x : number, y : number) {
+    public addStar(x: number, y: number) {
 
-        let s = new Star(x*16+8, y*16+8, this.stars.length);
+        let s = new Star(x * 16 + 8, y * 16 + 8, this.stars.length);
         this.weakInteractionTargets.push(s);
         this.stars.push(s);
     }
 
 
-    public addNPC(x : number, y : number, id : number) {
+    public addNPC(x: number, y: number, id: number) {
 
-        this.strongInteractionTargets.push(new NPC(x*16+8, y*16+8, id, this.message));
+        this.strongInteractionTargets.push(new NPC(x * 16 + 8, y * 16 + 8, id, this.message));
     }
 
 
-    public addChest(x : number, y : number, id : number) {
+    public addChest(x: number, y: number, id: number) {
 
-        let o = new Chest(x*16+8, y*16+8, id, this.message, this.hintbox);
+        let o = new Chest(x * 16 + 8, y * 16 + 8, id, this.message, this.hintbox);
         this.strongInteractionTargets.push(o);
         this.chests.push(o);
     }
 
 
-    public addLever(x : number, y : number) {
+    public addLever(x: number, y: number) {
 
-        this.lever = new Lever(x*16+8, y*16+8, this.message);
+        this.lever = new Lever(x * 16 + 8, y * 16 + 8, this.message);
         this.strongInteractionTargets.push(this.lever);
     }
 
 
-    public addDoor(x : number, y : number, id : number, inside : boolean) {
-        
-        this.doors.push(new Door(x*16+8, y*16+8, id, inside, this.message));
+    public addDoor(x: number, y: number, id: number, inside: boolean) {
+
+        this.doors.push(new Door(x * 16 + 8, y * 16 + 8, id, inside, this.message));
     }
 
 
-    public addSavepoint(x : number, y : number, id : number) {
+    public addSavepoint(x: number, y: number, id: number) {
 
-        let o = new SavePoint(x*16+8, y*16+8, id, 
+        let o = new SavePoint(x * 16 + 8, y * 16 + 8, id,
             this.message, this.saveManager);
         this.strongInteractionTargets.push(o);
         this.checkpoints.push(o);
     }
 
 
-    public addOrb(x : number, y : number, id : number) {
+    public addOrb(x: number, y: number, id: number) {
 
-        let o = new Orb(x*16+8, y*16+8, id, this.message, this.progress);
+        let o = new Orb(x * 16 + 8, y * 16 + 8, id, this.message, this.progress);
         this.strongInteractionTargets.push(o);
         this.orbs.push(o);
     }
 
 
-    public addPortal(x : number, y : number) {
+    public addPortal(x: number, y: number) {
 
-        this.portal = new Portal((x+1)*16, y*16+8, this.message, this.progress, this.portalCb);
+        this.portal = new Portal((x + 1) * 16, y * 16 + 8, this.message, this.progress, this.portalCb);
         this.strongInteractionTargets.push(this.portal);
     }
 
 
-    public addGiantChest(x : number, y : number) {
+    public addGiantChest(x: number, y: number) {
 
         this.strongInteractionTargets.push(
-            new GiantChest(x*16, y*16 + 8, this.message));
+            new GiantChest(x * 16, y * 16 + 8, this.message));
     }
 
 
-    public addEnemy(x : number, y : number, id : number) {
+    public addEnemy(x: number, y: number, id: number) {
 
-        let e = <Enemy> (new (getEnemyType(id))
+        let e = <Enemy>(new (getEnemyType(id))
             .prototype
-            .constructor(x*16+8, y*16+8, this.enemies.length));
+            .constructor(x * 16 + 8, y * 16 + 8, this.enemies.length));
         e.setProjectileCallback(this.projectileCb);
 
         this.enemies.push(e);
     }
 
 
-    public addHintTrigger(x : number, y : number, id : number, event : CoreEvent) {
+    public addHintTrigger(x: number, y: number, id: number, event: CoreEvent) {
 
-        let o = new HintTrigger(x*16, y*16, id, this.hintbox, event);
+        let o = new HintTrigger(x * 16, y * 16, id, this.hintbox, event);
         this.weakInteractionTargets.push(o);
         this.hintTriggers.push(o);
     }
 
 
-    public cameraCheck(camera : Camera) {
+    public cameraCheck(camera: Camera) {
 
         for (let s of this.switches) {
 
@@ -301,7 +301,7 @@ export class ObjectManager {
     }
 
 
-    public resetSwitches(omit : Switch) {
+    public resetSwitches(omit: Switch) {
 
         for (let s of this.switches) {
 
@@ -312,7 +312,7 @@ export class ObjectManager {
     }
 
 
-    private updateInteractionTargets(arr : Array<WeakInteractionTarget>, camera : Camera, event : CoreEvent) {
+    private updateInteractionTargets(arr: Array<WeakInteractionTarget>, camera: Camera, event: CoreEvent) {
 
         for (let c of arr) {
 
@@ -323,7 +323,7 @@ export class ObjectManager {
     }
 
 
-    private reset(camera : Camera) {
+    private reset(camera: Camera) {
 
         this.player.respawn();
         camera.focusOnObject(this.player);
@@ -335,7 +335,7 @@ export class ObjectManager {
     }
 
 
-    public update(stage : Stage, camera : Camera, event : CoreEvent) {
+    public update(stage: Stage, camera: Camera, event: CoreEvent) {
 
         if (camera.isMoving()) {
 
@@ -344,13 +344,13 @@ export class ObjectManager {
             return;
         }
 
-        let p : Vector2;
+        let p: Vector2;
         if (!this.player.doesExist()) {
 
             p = this.player.getPos();
 
             event.transition.activate(true, TransitionEffectType.CirleIn,
-                1.0/30.0, event => {
+                1.0 / 30.0, event => {
 
                     this.reset(camera);
 
@@ -375,16 +375,16 @@ export class ObjectManager {
 
                 p.update(event);
                 stage.objectCollisions(p, camera, event);
-            
+
                 this.player.projectileCollision(p, event);
             }
-        } 
+        }
 
         for (let s of this.switches) {
 
             s.cameraCheck(camera);
             s.update(event);
-            
+
             if (s.playerCollision(this.player, stage, event)) {
 
                 this.resetSwitches(s);
@@ -404,17 +404,17 @@ export class ObjectManager {
             e.playerCollision(this.player, event);
 
             if (e.doesExist() && !e.isDying() && e.isInCamera()) {
-                
+
                 for (let p of this.projectiles) {
 
                     e.projectileCollision(p, this.player, event);
-                } 
+                }
             }
         }
     }
 
 
-    public draw(canvas : Canvas) {
+    public draw(canvas: Canvas) {
 
         for (let s of this.switches) {
 
@@ -451,13 +451,13 @@ export class ObjectManager {
     }
 
 
-    public checkLoop(stage : Stage) {
+    public checkLoop(stage: Stage) {
 
         this.player.checkLoop(stage);
     }
 
 
-    public reinitializeObjectsByProgress(camera : Camera) {
+    public reinitializeObjectsByProgress(camera: Camera) {
 
         for (let e of this.enemies) {
 
@@ -503,12 +503,12 @@ export class ObjectManager {
                     c.activate();
 
                     this.player.teleportTo(
-                        Vector2.add(c.getPos(), new Vector2(0, 1)), 
+                        Vector2.add(c.getPos(), new Vector2(0, 1)),
                         false, false);
                     this.player.setActiveCheckpointReference(c);
 
                     camera.focusOnObject(this.player);
-                    
+
                     break;
                 }
             }
@@ -529,12 +529,12 @@ export class ObjectManager {
 
         if (this.lever != null &&
             this.progress.getBooleanProperty("fansEnabled")) {
-        
+
             this.lever.enable();
-        } 
+        }
 
         if (this.portal != null) {
-            
+
             this.portal.setInteractionState();
         }
     }
@@ -554,31 +554,31 @@ export class ObjectManager {
     }
 
 
-    public killPlayer(event : CoreEvent, resetSpawnpoint?: boolean) {
+    public killPlayer(event: CoreEvent, resetSpawnpoint?: boolean) {
         if (resetSpawnpoint == true) this.player.resetActiveCheckpointReference();
         this.player.startDeath(event);
     }
 
 
-    public isPlayerInside = () : boolean => this.player.isInside();
-    public getPlayerHealth = () : number => this.player.getHealth();
-    public getPlayerMaxHealth = () : number => this.player.maxHealth();
+    public isPlayerInside = (): boolean => this.player.isInside();
+    public getPlayerHealth = (): number => this.player.getHealth();
+    public getPlayerMaxHealth = (): number => this.player.maxHealth();
 
 
-    public hasStarInArea = 
-        (dx : number, dy : number, 
-        width : number, height : number) : boolean => 
-        objectInArea(this.stars, dx, dy, width, height);
+    public hasStarInArea =
+        (dx: number, dy: number,
+            width: number, height: number): boolean =>
+            objectInArea(this.stars, dx, dy, width, height);
 
 
-    public hasEnemyInArea(dx : number, dy : number, 
-        width : number, height : number) : boolean {
+    public hasEnemyInArea(dx: number, dy: number,
+        width: number, height: number): boolean {
 
-        let p : Vector2;
+        let p: Vector2;
 
         for (let a of this.enemies) {
 
-            if (!a.doesExist() || a.isDying() || a.isGhost()) 
+            if (!a.doesExist() || a.isDying() || a.isGhost())
                 continue;
 
             p = a.getPos();
@@ -589,23 +589,23 @@ export class ObjectManager {
     }
 
 
-    public getDoorConnectionInArea(dx : number, dy : number, 
-        width : number, height : number) : Rect {
+    public getDoorConnectionInArea(dx: number, dy: number,
+        width: number, height: number): Rect {
 
-        let p : Vector2;
-        let q : Vector2;
+        let p: Vector2;
+        let q: Vector2;
 
         for (let d of this.doors) {
 
             p = d.getPos();
             q = d.getPairPos();
-            
+
             if (p.x >= dx && p.y >= dy && p.x <= dx + width && p.y <= dy + height) {
-                
+
                 return new Rect(
-                    (p.x / 16) | 0, 
-                    (p.y / 16) | 0, 
-                    (q.x / 16) | 0, 
+                    (p.x / 16) | 0,
+                    (p.y / 16) | 0,
+                    (q.x / 16) | 0,
                     (q.y / 16) | 0);
             }
         }
@@ -613,6 +613,6 @@ export class ObjectManager {
     }
 
 
-    public getEnemyCount = () : number => this.enemies.length;
-    public getStarCount = () : number => this.stars.length;
+    public getEnemyCount = (): number => this.enemies.length;
+    public getStarCount = (): number => this.stars.length;
 }

@@ -262,13 +262,6 @@ export class GameScene implements Scene {
             return false;
         }
 
-        if (!this.progress.doesValueExistInArray("items", 11)) {
-
-            this.message.addMessages(event.localization.findValue(["noMap"]));
-            this.message.activate(0, false, cb);
-            return false;
-        }
-
         this.worldMap.activate(this.stage, this.objects, this.camera);
 
         return true;

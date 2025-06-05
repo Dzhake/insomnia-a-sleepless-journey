@@ -5,7 +5,7 @@ import { KeyValuePair } from "./types.ts";
 
 
 
-const getProperty = <T>(arr : Array<KeyValuePair<T>>, key : string, def : T) : T => {
+const getProperty = <T>(arr: Array<KeyValuePair<T>>, key: string, def: T): T => {
 
     for (let e of arr) {
 
@@ -18,7 +18,7 @@ const getProperty = <T>(arr : Array<KeyValuePair<T>>, key : string, def : T) : T
 }
 
 
-const setProperty = <T>(arr : Array<KeyValuePair<T>>, key : string, value : T) : void => {
+const setProperty = <T>(arr: Array<KeyValuePair<T>>, key: string, value: T): void => {
 
     for (let e of arr) {
 
@@ -32,16 +32,16 @@ const setProperty = <T>(arr : Array<KeyValuePair<T>>, key : string, value : T) :
 }
 
 
-const dumpProperties = <T>(arr : Array<KeyValuePair<T>>) : string => {
+const dumpProperties = <T>(arr: Array<KeyValuePair<T>>): string => {
 
     let str = "{\n";
 
-    let a : KeyValuePair<T>;
-    for (let i = 0; i < arr.length; ++ i) {
+    let a: KeyValuePair<T>;
+    for (let i = 0; i < arr.length; ++i) {
 
         a = arr[i];
         str += '"' + a.key + '": ' + String(a.value);
-        if (i != arr.length-1)
+        if (i != arr.length - 1)
             str += ",";
 
         str += "\n";
@@ -52,31 +52,31 @@ const dumpProperties = <T>(arr : Array<KeyValuePair<T>>) : string => {
 }
 
 
-const dumpArrayProperties = <T>(arr : Array<KeyValuePair<Array<T>>>) : string => {
+const dumpArrayProperties = <T>(arr: Array<KeyValuePair<Array<T>>>): string => {
 
     let str = "{\n";
 
-    let a : KeyValuePair<Array<T>>;
-    for (let i = 0; i < arr.length; ++ i) {
+    let a: KeyValuePair<Array<T>>;
+    for (let i = 0; i < arr.length; ++i) {
 
         a = arr[i];
         str += '"' + a.key + '": [';
 
-        for (let j = 0; j < a.value.length; ++ j) {
-            
+        for (let j = 0; j < a.value.length; ++j) {
+
             str += String(a.value[j]);
-            if (j != a.value.length-1)
+            if (j != a.value.length - 1)
                 str += ",";
         }
         str += "]";
-        if (i != arr.length-1) {
+        if (i != arr.length - 1) {
 
             str += ",";
         }
         str += "\n";
     }
     str += "}";
-    
+
     return str;
 }
 
@@ -85,32 +85,32 @@ const dumpArrayProperties = <T>(arr : Array<KeyValuePair<Array<T>>>) : string =>
 export class ProgressManager {
 
 
-    private booleanProperties : Array<KeyValuePair<boolean>>;
-    private numberProperties : Array<KeyValuePair<number>>;
-    private numberArrayProperties : Array<KeyValuePair<Array<number>>>;
+    private booleanProperties: Array<KeyValuePair<boolean>>;
+    private numberProperties: Array<KeyValuePair<number>>;
+    private numberArrayProperties: Array<KeyValuePair<Array<number>>>;
 
 
     constructor() {
 
-        this.booleanProperties = new Array<KeyValuePair<boolean>> ();
-        this.numberProperties = new Array<KeyValuePair<number>> ();
-        this.numberArrayProperties = new Array<KeyValuePair<Array<number>>> ();
+        this.booleanProperties = new Array<KeyValuePair<boolean>>();
+        this.numberProperties = new Array<KeyValuePair<number>>();
+        this.numberArrayProperties = new Array<KeyValuePair<Array<number>>>();
     }
 
 
-    public setBooleanProperty = (key : string, value = true) : void => setProperty<boolean>(this.booleanProperties, key, value);
-    public getBooleanProperty = (key : string) : boolean => getProperty<boolean>(this.booleanProperties, key, false);
+    public setBooleanProperty = (key: string, value = true): void => setProperty<boolean>(this.booleanProperties, key, value);
+    public getBooleanProperty = (key: string): boolean => getProperty<boolean>(this.booleanProperties, key, false);
 
-    public setNumberProperty = (key : string, value = 0) : void => setProperty<number>(this.numberProperties, key, value);
-    public getNumberProperty = (key : string, def = -1) : number => getProperty<number>(this.numberProperties, key, def);
+    public setNumberProperty = (key: string, value = 0): void => setProperty<number>(this.numberProperties, key, value);
+    public getNumberProperty = (key: string, def = -1): number => getProperty<number>(this.numberProperties, key, def);
 
 
-    public increaseNumberProperty(key : string, amount = 1) {
+    public increaseNumberProperty(key: string, amount = 1) {
 
         for (let e of this.numberProperties) {
 
             if (e.key == key) {
-    
+
                 e.value += amount;
                 return;
             }
@@ -119,13 +119,13 @@ export class ProgressManager {
     }
 
 
-    public addValueToArray(key : string, value : number, noDuplicates = true) {
+    public addValueToArray(key: string, value: number, noDuplicates = true) {
 
-        let arr =  <Array<number>> null;
+        let arr = <Array<number>>null;
         for (let e of this.numberArrayProperties) {
 
             if (e.key == key) {
-    
+
                 arr = e.value;
                 break;
             }
@@ -133,18 +133,28 @@ export class ProgressManager {
 
         if (arr == null) {
 
-            arr = new Array<number> ();
-            this.numberArrayProperties.push(new KeyValuePair<Array<number>> (key, arr));
+            arr = new Array<number>();
+            this.numberArrayProperties.push(new KeyValuePair<Array<number>>(key, arr));
         }
 
-        if (noDuplicates && arr.includes(value)) 
+        if (noDuplicates && arr.includes(value))
             return;
 
         arr.push(value);
     }
 
+    public removeValueFromArray(key: string, value: number): void {
+        let arr = getProperty<Array<number>>(this.numberArrayProperties, key, null);
+        if (arr == null)
+            return;
 
-    public doesValueExistInArray (key : string, value : number) : boolean {
+        const index = arr.indexOf(value);
+        if (index < 0) return;
+        arr.splice(index, 1);
+    }
+
+
+    public doesValueExistInArray(key: string, value: number): boolean {
 
         let arr = getProperty<Array<number>>(this.numberArrayProperties, key, null);
         if (arr == null)
@@ -154,34 +164,34 @@ export class ProgressManager {
     }
 
 
-    public dump = () : string => 
+    public dump = (): string =>
         "\"boolProp\": " + dumpProperties<boolean>(this.booleanProperties) +
         ",\n" + "\"numberProp\": " + dumpProperties<number>(this.numberProperties) +
         ",\n" + "\"arrayProp\": " + dumpArrayProperties<number>(this.numberArrayProperties);
 
 
-    public recoverFromJSON(data : any) {
+    public recoverFromJSON(data: any) {
 
-        this.booleanProperties = new Array<KeyValuePair<boolean>> ();
-        this.numberProperties = new Array<KeyValuePair<number>> ();
-        this.numberArrayProperties = new Array<KeyValuePair<Array<number>>> ();
+        this.booleanProperties = new Array<KeyValuePair<boolean>>();
+        this.numberProperties = new Array<KeyValuePair<number>>();
+        this.numberArrayProperties = new Array<KeyValuePair<Array<number>>>();
 
         for (let k in data["arrayProp"]) {
 
             this.numberArrayProperties.push(
-                new KeyValuePair<Array<number>> (k, Array.from(data["arrayProp"][k])));
+                new KeyValuePair<Array<number>>(k, Array.from(data["arrayProp"][k])));
         }
 
         for (let k in data["boolProp"]) {
 
             this.booleanProperties.push(
-                new KeyValuePair<boolean> (k, data["boolProp"][k]));
+                new KeyValuePair<boolean>(k, data["boolProp"][k]));
         }
 
         for (let k in data["numberProp"]) {
 
             this.numberProperties.push(
-                new KeyValuePair<number> (k, data["numberProp"][k]));
+                new KeyValuePair<number>(k, data["numberProp"][k]));
         }
     }
 }

@@ -20,17 +20,17 @@ const FACING_DIR = [
 export class Chest extends StrongInteractionTarget {
 
 
-    private flip : Flip;
-    private opened : boolean;
+    private flip: Flip;
+    private opened: boolean;
 
-    private readonly message : MessageBox;
-    private readonly hintbox : HintBox;
-    
-    public readonly id : number;
+    private readonly message: MessageBox;
+    private readonly hintbox: HintBox;
+
+    public readonly id: number;
 
 
-    constructor(x : number, y : number, id : number, message : MessageBox,
-        hintbox : HintBox) {
+    constructor(x: number, y: number, id: number, message: MessageBox,
+        hintbox: HintBox) {
 
         super(x, y, true);
 
@@ -47,14 +47,14 @@ export class Chest extends StrongInteractionTarget {
     }
 
 
-    protected interactionEvent(player : Player, camera : Camera, event : CoreEvent) {
+    protected interactionEvent(player: Player, camera: Camera, event: CoreEvent) {
 
-        const HINT_ID = [5, 6, -1, 7, 8, 9, -1, -1, -1, -1, -1, 10];
+        const HINT_ID = [-1, 6, -1, 7, 8, 9, -1, -1, -1, -1, -1, 10];
         const WAIT_TIME = 45;
 
         if (this.opened) return;
 
-        let text = <Array<string>> event.localization.findValue(["chest", String(this.id)]);
+        let text = <Array<string>>event.localization.findValue(["chest", String(this.id)]);
 
         if (text == null) return;
 
@@ -81,15 +81,15 @@ export class Chest extends StrongInteractionTarget {
     }
 
 
-    public draw(canvas : Canvas) {
+    public draw(canvas: Canvas) {
 
         let bmp = canvas.assets.getBitmap("chest");
 
         if (!this.inCamera) return;
 
-        canvas.drawSprite(this.spr, bmp, 
-            this.pos.x - this.spr.width/2,
-            this.pos.y - this.spr.height/2,
+        canvas.drawSprite(this.spr, bmp,
+            this.pos.x - this.spr.width / 2,
+            this.pos.y - this.spr.height / 2,
             this.flip);
     }
 

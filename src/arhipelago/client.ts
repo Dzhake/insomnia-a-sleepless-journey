@@ -4,6 +4,7 @@ import { Core, CoreEvent, Scene } from '../core';
 import { GameScene } from "../game";
 import { MessageBox } from "../messagebox";
 import { HintBox } from "../hintbox";
+import { ProgressManager } from '../progress';
 
 
 export class ArchipelagoClient {
@@ -71,7 +72,10 @@ export class ArchipelagoClient {
 
     public onReceive(items: Item[]) {
         const player: Player = Player.getInstance();
+        const log: HTMLParagraphElement = document.getElementById("log") as HTMLParagraphElement;
+        log.innerText = "";
         for (const item of items) {
+            log.innerText += `Received ${item.name} at ${item.locationName}\n`
             switch (item.id) {
                 case 13:
                     player.progress.increaseNumberProperty("stars");
@@ -88,13 +92,20 @@ export class ArchipelagoClient {
         }
     }
 
+    public updateReceivedItems() {
+        const player: Player = Player.getInstance();
+        player.progress.setNumberProperty("stars", 0);
+        player.progress.setNumberProperty("kills", 0);
+        this.onReceive(this.client.items.received);
+    }
+
     public receiveEquipment(id: int) {
         const event: CoreEvent = Core.getInstance().event;
         let text = <Array<string>>event.localization.findValue(["chest", String(id)]);
 
         if (text == null) return;
 
-        const HINT_ID = [5, 6, -1, 7, 8, 9, -1, -1, -1, -1, -1, 10];
+        const HINT_ID = [-1, 6, -1, 7, 8, 9, -1, -1, -1, -1, -1, 10];
         const WAIT_TIME = 45;
 
         event.audio.playSample(event.assets.getSample("item"), 0.40);
@@ -122,6 +133,16 @@ export class ArchipelagoClient {
         const player: Player = Player.getInstance();
         player.setObtainItemPose(id);
         player.progress.addValueToArray("items", id, true);
+    }
+
+    public toggleFans(): void {
+        const progress: ProgressManager = Player.getInstance().progress;
+        progress.setBooleanProperty("fansEnabled", !progress.getBooleanProperty("fansEnabled"))
+    }
+
+    public removeEquipment(id: int): void {
+        const progress: ProgressManager = Player.getInstance().progress;
+        progress.removeValueFromArray("items", id)
     }
 }
 

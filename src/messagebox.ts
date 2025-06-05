@@ -5,7 +5,7 @@ import { Menu, MenuButton } from "./menu.ts";
 import { Vector2 } from "./vector.ts";
 
 
-export const drawBox = (canvas : Canvas, x : number, y : number, w : number, h : number) : void => {
+export const drawBox = (canvas: Canvas, x: number, y: number, w: number, h: number): void => {
 
     const BOX_OFFSET = 2;
     const BOX_COLORS = [
@@ -15,14 +15,14 @@ export const drawBox = (canvas : Canvas, x : number, y : number, w : number, h :
         [0, 0, 0]
     ];
 
-    for (let i = BOX_COLORS.length-1; i >= 0; -- i) {
+    for (let i = BOX_COLORS.length - 1; i >= 0; --i) {
 
         canvas.setFillColor(...BOX_COLORS[i]);
         canvas.fillRect(
-            x - BOX_OFFSET - i, 
+            x - BOX_OFFSET - i,
             y - BOX_OFFSET - i,
-            w + (BOX_OFFSET + i)*2,
-            h + (BOX_OFFSET + i)*2);
+            w + (BOX_OFFSET + i) * 2,
+            h + (BOX_OFFSET + i) * 2);
     }
 }
 
@@ -30,29 +30,29 @@ export const drawBox = (canvas : Canvas, x : number, y : number, w : number, h :
 export class MessageBox extends ActivableObject {
 
 
-    private queue : Array<string>;
-    private sizes : Array<Vector2>
-    private currentMessage : string;
-    private currentSize : Vector2;
+    private queue: Array<string>;
+    private sizes: Array<Vector2>
+    private currentMessage: string;
+    private currentSize: Vector2;
 
-    private charTimer : number;
-    private charPos : number;
-    private ready : boolean;
+    private charTimer: number;
+    private charPos: number;
+    private ready: boolean;
 
-    private waitTimer : number;
-    private waveTimer : number;
+    private waitTimer: number;
+    private waveTimer: number;
 
-    private yesNoBox : Menu;
-    private confirmEvent : (event : CoreEvent) => void;
-    private confirm : boolean;
+    private yesNoBox: Menu;
+    private confirmEvent: (event: CoreEvent) => void;
+    private confirm: boolean;
 
 
-    constructor(event : CoreEvent) {
+    constructor(event: CoreEvent) {
 
         super();
 
-        this.queue = new Array<string> ();
-        this.sizes = new Array<Vector2> ();
+        this.queue = new Array<string>();
+        this.sizes = new Array<Vector2>();
         this.currentMessage = "";
         this.currentSize = new Vector2();
 
@@ -66,7 +66,7 @@ export class MessageBox extends ActivableObject {
         this.waveTimer = 0;
 
         let loc = event.localization;
-    
+
         this.yesNoBox = new Menu(
             [
                 new MenuButton(loc.findValue(["yes"]), event => {
@@ -83,9 +83,9 @@ export class MessageBox extends ActivableObject {
     }
 
 
-    public addMessages(messages : Array<string>) {
+    public addMessages(messages: Array<string>) {
 
-        let sm : Array<string>;
+        let sm: Array<string>;
         for (let m of messages) {
 
             this.queue.push(m);
@@ -99,8 +99,8 @@ export class MessageBox extends ActivableObject {
     }
 
 
-    public activate(waitTime = 0, confirm = false, 
-        confirmEvent = (event : CoreEvent) => {}, startingIndex: int = 1) {
+    public activate(waitTime = 0, confirm = false,
+        confirmEvent = (event: CoreEvent) => { }, startingIndex: int = 1) {
 
         if (this.queue.length == 0) return;
 
@@ -131,10 +131,10 @@ export class MessageBox extends ActivableObject {
     }
 
 
-    public update(event : CoreEvent) {
+    public update(event: CoreEvent) {
 
         const WAVE_SPEED = 0.1;
-        const CHAR_TIME = 4;
+        const CHAR_TIME = 0.3;
 
         if (!this.active) return;
 
@@ -147,37 +147,28 @@ export class MessageBox extends ActivableObject {
         if (!this.ready) {
 
             this.waveTimer = 0.0;
+            this.charTimer += event.step;
+            while (this.charTimer >= CHAR_TIME && !this.ready) {
 
-            if (event.input.anyPressed()) {
+                ++this.charPos;
+                this.charTimer -= CHAR_TIME;
 
-                this.ready = true;
-                this.charPos = this.currentMessage.length;
-            }
-            else {
+                while (this.charPos < this.currentMessage.length &&
+                    ["\n", " ", "\t"].includes(this.currentMessage[this.charPos])) {
 
-                this.charTimer += event.step;
-                if (this.charTimer >= CHAR_TIME) {
-
-                    ++ this.charPos;
-                    this.charTimer -= CHAR_TIME;
-
-                    while (this.charPos < this.currentMessage.length &&
-                        ["\n", " ", "\t"].includes(this.currentMessage[this.charPos])) {
-
-                        ++ this.charPos;
-                    }
-                    this.ready = this.charPos == this.currentMessage.length;
+                    ++this.charPos;
                 }
+                this.ready = this.charPos == this.currentMessage.length;
             }
         }
         else {
-            
+
             this.waveTimer = (this.waveTimer + WAVE_SPEED) % (Math.PI * 2);
 
             if (this.confirm && this.queue.length == 0) {
 
                 this.yesNoBox.update(event);
-            } 
+            }
             else if (event.input.anyPressed()) {
 
                 this.ready = false;
@@ -204,7 +195,7 @@ export class MessageBox extends ActivableObject {
     }
 
 
-    public draw(canvas : Canvas, box = true) {
+    public draw(canvas: Canvas, box = true) {
 
         const SYMBOL_AMPLITUDE = 1.0;
 
@@ -215,8 +206,8 @@ export class MessageBox extends ActivableObject {
         let w = this.currentSize.x * 8;
         let h = this.currentSize.y * 10;
 
-        let x = canvas.width/2 - w/2;
-        let y = canvas.height/2 - h/2;
+        let x = canvas.width / 2 - w / 2;
+        let y = canvas.height / 2 - h / 2;
 
         if (box)
             drawBox(canvas, x, y, w, h);
@@ -231,7 +222,7 @@ export class MessageBox extends ActivableObject {
 
             if (this.confirm && this.queue.length == 0) {
 
-                this.yesNoBox.draw(canvas, w/4, h/2 + 20, 0, 10, true);
+                this.yesNoBox.draw(canvas, w / 4, h / 2 + 20, 0, 10, true);
             }
             else {
 
@@ -242,5 +233,5 @@ export class MessageBox extends ActivableObject {
     }
 
 
-    public isActive = () : boolean => this.active;
+    public isActive = (): boolean => this.active;
 }
