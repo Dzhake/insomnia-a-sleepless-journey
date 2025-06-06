@@ -134,7 +134,7 @@ export class MessageBox extends ActivableObject {
     public update(event: CoreEvent) {
 
         const WAVE_SPEED = 0.1;
-        const CHAR_TIME = 0.3;
+        const CHAR_TIME = 0.1;
 
         if (!this.active) return;
 

@@ -5,6 +5,7 @@ import { GameScene } from "../game";
 import { MessageBox } from "../messagebox";
 import { HintBox } from "../hintbox";
 import { ProgressManager } from '../progress';
+import { Vector2 } from "../vector";
 
 
 export class ArchipelagoClient {
@@ -83,6 +84,9 @@ export class ArchipelagoClient {
                 case 14:
                     player.progress.increaseNumberProperty("kills");
                     break;
+                case 15:
+                    player.progress, setBooleanProperty("fansEnabled");
+                    break;
                 default:
                     if (!player.progress.doesValueExistInArray("items", item.id)) {
                         this.receiveEquipment(item.id)
@@ -143,6 +147,16 @@ export class ArchipelagoClient {
     public removeEquipment(id: int): void {
         const progress: ProgressManager = Player.getInstance().progress;
         progress.removeValueFromArray("items", id)
+    }
+
+    public teleportToRoom(c: int, r: int): void {
+        const player: Player = Player.getInstance();
+        const prevPos: Vector2 = player.pos.clone();
+        const roomOffset: Vector2 = new Vector2(prevPos.x % 160, prevPos.y % 144);
+        const newPos: Vector2 = new Vector2(c * 160 + roomOffset.x, r * 144 + roomOffset.y);
+        console.log(roomOffset);
+        console.log(newPos);
+        player.pos = newPos;
     }
 }
 
