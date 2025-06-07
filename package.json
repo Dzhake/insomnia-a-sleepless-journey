@@ -4,7 +4,8 @@
   "description": "![](https://github.com/jani-nykanen/insomnia-a-sleepless-journey/blob/main/assets/bitmaps/logo.png?raw=true)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [],
   "author": "",

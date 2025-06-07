@@ -1,0 +1,306 @@
+{
+    "bitmapPath": "assets/bitmaps/",
+    "bitmaps": [
+        {
+            "name": "font",
+            "path": "font.png"
+        },
+        {
+            "name": "fontYellow",
+            "path": "font_yellow.png"
+        },
+        {
+            "name": "fontBig",
+            "path": "font_big.png"
+        },
+        {
+            "name": "player",
+            "path": "player.png"
+        },
+        {
+            "name": "forest",
+            "path": "forest.png"
+        },
+        {
+            "name": "sky",
+            "path": "sky.png"
+        },
+        {
+            "name": "dust",
+            "path": "dust.png"
+        },
+        {
+            "name": "projectile",
+            "path": "projectile.png"
+        },
+        {
+            "name": "particles",
+            "path": "particles.png"
+        },
+        {
+            "name": "switch",
+            "path": "switch.png"
+        },
+        {
+            "name": "fence",
+            "path": "fence.png"
+        },
+        {
+            "name": "propeller",
+            "path": "propeller.png"
+        },
+        {
+            "name": "coin",
+            "path": "coin.png"
+        },
+        {
+            "name": "enemies",
+            "path": "enemies.png"
+        },
+        {
+            "name": "star",
+            "path": "star.png"
+        },
+        {
+            "name": "npc",
+            "path": "npc.png"
+        },
+        {
+            "name": "symbol",
+            "path": "symbol.png"
+        },
+        {
+            "name": "chest",
+            "path": "chest.png"
+        },
+        {
+            "name": "items",
+            "path": "items.png"
+        },
+        {
+            "name": "lever",
+            "path": "lever.png"
+        },
+        {
+            "name": "door",
+            "path": "door.png"
+        },
+        {
+            "name": "hearts",
+            "path": "hearts.png"
+        },
+        {
+            "name": "mapIcons",
+            "path": "map_icons.png"
+        },
+        {
+            "name": "checkpoint",
+            "path": "checkpoint.png"
+        },
+        {
+            "name": "brickwall",
+            "path": "brickwall.png"
+        },
+        {
+            "name": "spin",
+            "path": "spin.png"
+        },
+        {
+            "name": "ghosts",
+            "path": "ghosts.png"
+        },
+        {
+            "name": "orb",
+            "path": "orb.png"
+        },
+        {
+            "name": "bigDoor",
+            "path": "big_door.png"
+        },
+        {
+            "name": "dreamBackground",
+            "path": "dream_background.png"
+        },
+        {
+            "name": "giantChest",
+            "path": "giant_chest.png"
+        },
+        {
+            "name": "theEnd",
+            "path": "the_end.png"
+        },
+        {
+            "name": "logo",
+            "path": "logo.png"
+        },
+        {
+            "name": "intro",
+            "path": "intro.png"
+        },
+        {
+            "name": "tileset",
+            "path": "tileset.png"
+        },
+        {
+            "name": "minimap",
+            "path": "minimap.png"
+        }
+    ],
+    "samplePath": "assets/audio/",
+    "samples": [
+        {
+            "name": "jump",
+            "path": "jump.wav"
+        },
+        {
+            "name": "spin",
+            "path": "spin.wav"
+        },
+        {
+            "name": "rocket",
+            "path": "rocket.wav"
+        },
+        {
+            "name": "climb",
+            "path": "climb.wav"
+        },
+        {
+            "name": "shake",
+            "path": "shake.wav"
+        },
+        {
+            "name": "throw",
+            "path": "throw.wav"
+        },
+        {
+            "name": "hit",
+            "path": "hit.wav"
+        },
+        {
+            "name": "hurt",
+            "path": "hurt.wav"
+        },
+        {
+            "name": "kill",
+            "path": "kill.wav"
+        },
+        {
+            "name": "die",
+            "path": "die.wav"
+        },
+        {
+            "name": "star",
+            "path": "star.wav"
+        },
+        {
+            "name": "choose",
+            "path": "choose.wav"
+        },
+        {
+            "name": "select",
+            "path": "select.wav"
+        },
+        {
+            "name": "pause",
+            "path": "pause.wav"
+        },
+        {
+            "name": "door",
+            "path": "door.wav"
+        },
+        {
+            "name": "break",
+            "path": "break.wav"
+        },
+        {
+            "name": "lever",
+            "path": "lever.wav"
+        },
+        {
+            "name": "hop",
+            "path": "hop.wav"
+        },
+        {
+            "name": "open",
+            "path": "open.wav"
+        },
+        {
+            "name": "enemyJump",
+            "path": "enemy_jump.wav"
+        },
+        {
+            "name": "checkpoint",
+            "path": "checkpoint.wav"
+        },
+        {
+            "name": "shoot",
+            "path": "shoot.wav"
+        },
+        {
+            "name": "toggle",
+            "path": "toggle.wav"
+        },
+        {
+            "name": "item",
+            "path": "item.wav"
+        },
+        {
+            "name": "dive",
+            "path": "dive.wav"
+        },
+        {
+            "name": "orb",
+            "path": "orb.wav"
+        },
+        {
+            "name": "teleport",
+            "path": "teleport.wav"
+        },
+        {
+            "name": "start",
+            "path": "start.wav"
+        },
+        {
+            "name": "asleep",
+            "path": "asleep.ogg"
+        },
+        {
+            "name": "theme",
+            "path": "theme.ogg"
+        },
+        {
+            "name": "inside",
+            "path": "inside.ogg"
+        },
+        {
+            "name": "title",
+            "path": "title.ogg"
+        },
+        {
+            "name": "final",
+            "path": "final.ogg"
+        }
+    ],
+    "tilemapPath": "assets/tilemaps/",
+    "tilemaps": [
+        {
+            "name": "collisionMap",
+            "path": "collision_map.tmx"
+        },
+        {
+            "name": "base",
+            "path": "base.tmx"
+        },
+        {
+            "name": "finalArea",
+            "path": "final_area.tmx"
+        }
+    ],
+    "documentPath": "assets/localization/",
+    "documents": [
+        {
+            "name": "localization",
+            "path": "en-us.json"
+        }
+    ]
+}

@@ -4,7 +4,7 @@ import "./arhipelago/global.ts"
 
 
 window.onload = () => (new Core(160, 144))
-    .run(AudioIntro, "assets/index.json",
+    .run(AudioIntro, "/assets/index.json",
         event => {
 
             event.input

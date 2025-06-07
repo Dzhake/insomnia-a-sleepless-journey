@@ -78,7 +78,7 @@ export class Chest extends StrongInteractionTarget {
         //player.setObtainItemPose(this.id);
         //player.progress.addValueToArray("items", this.id, true);
         ArchipelagoClient.getInstance().client.check(this.id + 1);
-        console.log(this.id + 1);
+        //console.log(this.id + 1);
         player.progress.addValueToArray("openChests", this.id, true);
 
         this.forceOpen();

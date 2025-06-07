@@ -341,7 +341,7 @@ export class Enemy extends CollisionObject {
 
         if (!this.ghost) {
             ArchipelagoClient.getInstance().client.check(this.entityID + 114);
-            console.log(this.entityID + 114);
+            //console.log(this.entityID + 114);
             //progress.increaseNumberProperty("kills", 1);
             progress.addValueToArray("enemiesKilled", this.entityID, true);
         }
