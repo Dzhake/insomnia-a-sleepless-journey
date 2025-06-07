@@ -422,12 +422,32 @@ export class GameScene implements Scene {
             canvas.setFillColor(0, 0, 0, 0.67);
             canvas.fillRect();
 
-            if (this.message.isActive()) {
+            const items_bmp = canvas.assets.getBitmap("items");
+            let dx = 0;
+            let dy = 108;
+            const progress: ProgressManager = ProgressManager.getInstance();
 
+            for (let itemID = 0; itemID < 13; itemID++) {
+                if (progress.doesValueExistInArray("items", itemID)) {
+                    canvas.drawBitmapRegion(items_bmp, itemID * 16, 0, 16, 16, dx, dy);
+                }
+
+                dx += 16;
+                if (itemID == 9) {
+                    dx -= 92;
+                    dy = 124;
+                }
+            }
+
+            if (progress.getBooleanProperty("fansEnabled")) {
+                canvas.drawBitmapRegion(canvas.assets.getBitmap("propeller"), 0, 0, 16, 16, 120, 124);
+            }
+
+
+            if (this.message.isActive()) {
                 this.message.draw(canvas);
             }
             else {
-
                 this.pauseMenu.draw(canvas, 0, 0, 0, 10, true);
             }
 
