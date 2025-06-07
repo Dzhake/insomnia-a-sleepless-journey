@@ -55,7 +55,7 @@ export class Chest extends StrongInteractionTarget {
 
         if (this.opened) return;
 
-        let text = <Array<string>>event.localization.findValue(["chest", String(this.id)]);
+        /*let text = <Array<string>>event.localization.findValue(["chest", String(this.id)]);
 
         if (text == null) return;
 
@@ -73,11 +73,12 @@ export class Chest extends StrongInteractionTarget {
             }
 
             event.audio.resumeMusic();
-        });
+        });*/
 
-        player.setObtainItemPose(this.id);
+        //player.setObtainItemPose(this.id);
         //player.progress.addValueToArray("items", this.id, true);
-        ArchipelagoClient.getInstance().client.send(this.id + 1);
+        ArchipelagoClient.getInstance().client.check(this.id + 1);
+        console.log(this.id + 1);
         player.progress.addValueToArray("openChests", this.id, true);
 
         this.forceOpen();

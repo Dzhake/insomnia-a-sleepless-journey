@@ -66,7 +66,8 @@ export class Star extends WeakInteractionTarget {
 
         this.waveTimer = 0;
 
-        ArchipelagoClient.getInstance().client.send(this.entityID + 15);
+        ArchipelagoClient.getInstance().client.check(this.entityID + 15);
+        console.log(this.entityID + 15);
         //player.progress.increaseNumberProperty("stars", 1);
         player.progress.addValueToArray("starsCollected", this.entityID, true);
 

@@ -88,7 +88,18 @@ export class ProgressManager {
     private booleanProperties: Array<KeyValuePair<boolean>>;
     private numberProperties: Array<KeyValuePair<number>>;
     private numberArrayProperties: Array<KeyValuePair<Array<number>>>;
+    private static instance;
 
+    public static getInstance() {
+        if (!ProgressManager.instance) {
+            ProgressManager.instance = new ProgressManager();
+        }
+        return ProgressManager.instance;
+    }
+
+    public static reset() {
+        ProgressManager.instance = null;
+    }
 
     constructor() {
 

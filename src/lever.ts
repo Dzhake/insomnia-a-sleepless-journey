@@ -48,7 +48,8 @@ export class Lever extends StrongInteractionTarget {
         this.enable();
 
         player.setUsePose();
-        ArchipelagoClient.getInstance().client().send(14);
+        ArchipelagoClient.getInstance().client().check(14);
+        console.log(14);
         //player.progress.setBooleanProperty("fansEnabled");
 
         event.audio.playSample(event.assets.getSample("lever"), 0.50);

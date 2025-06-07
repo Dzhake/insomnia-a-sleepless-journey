@@ -22,7 +22,7 @@ export class ArchipelagoClient {
     public client: Client;
 
     constructor() {
-        //this.showConnected(false);
+        this.showConnected(false);
         this.client = new Client();
         console.log("Created archipelago client");
 
@@ -30,7 +30,7 @@ export class ArchipelagoClient {
             console.log(content);
         });
 
-        this.client.items.on("itemsReceived", this.onReceive);
+        this.client.items.on("itemsReceived", (items: Item[]) => this.onReceive(items));
 
         document.getElementById('input-chat').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -53,8 +53,13 @@ export class ArchipelagoClient {
 
     public login(host: string, port: string, playerName: string, password: string) {
         this.client.login(host + ':' + port, playerName, "Insomnia a sleepless journey", { password: password })
-            .then(function () { console.log("Connected to the Archipelago server!"); this.showConnected(true); })
+            .then(() => this.onConnect())
             .catch(function (e) { console.error(e); alert(e); });
+    }
+
+    private onConnect() {
+        console.log("Connected to the Archipelago server!");
+        this.showConnected(true);
     }
 
     public input(text: string): void {
@@ -72,7 +77,6 @@ export class ArchipelagoClient {
     }
 
     public onReceive(items: Item[]) {
-        const player: Player = Player.getInstance();
         const log: HTMLParagraphElement = document.getElementById("log") as HTMLParagraphElement;
         log.innerText = "";
         for (const item of items) {
@@ -80,31 +84,37 @@ export class ArchipelagoClient {
             const id = item.id - 1;
             switch (id) {
                 case 13:
-                    player.progress.setBooleanProperty("fansEnabled");
+                    ProgressManager.getInstance().setBooleanProperty("fansEnabled");
+                    log.style.color = "#FFFFFF"
                     break;
                 case 14:
-                    player.progress.increaseNumberProperty("stars");
+                    ProgressManager.getInstance().increaseNumberProperty("stars");
+                    log.style.color = "#F4FF00"
                     break;
                 case 15:
-                    player.progress.increaseNumberProperty("kills");
+                    ProgressManager.getInstance().increaseNumberProperty("kills");
+                    log.style.color = "#FF0000"
                     break;
                 default:
-                    if (!player.progress.doesValueExistInArray("items", id)) {
+                    if (!ProgressManager.getInstance().doesValueExistInArray("items", id)) {
                         this.receiveEquipment(id)
                     }
+                    log.style.color = "#FFFFFF"
                     break;
             }
         }
     }
 
     public updateReceivedItems() {
-        const player: Player = Player.getInstance();
-        player.progress.setNumberProperty("stars", 0);
-        player.progress.setNumberProperty("kills", 0);
+        ProgressManager.getInstance().setNumberProperty("stars", 0);
+        ProgressManager.getInstance().setNumberProperty("kills", 0);
         this.onReceive(this.client.items.received);
     }
 
     public receiveEquipment(id: int) {
+        ProgressManager.getInstance().addValueToArray("items", id, true);
+
+        if (!Core.getInstance() || !Player.getInstance()) return;
         const event: CoreEvent = Core.getInstance().event;
         let text = <Array<string>>event.localization.findValue(["chest", String(id)]);
 
@@ -137,7 +147,6 @@ export class ArchipelagoClient {
 
         const player: Player = Player.getInstance();
         player.setObtainItemPose(id);
-        player.progress.addValueToArray("items", id, true);
     }
 
     public toggleFans(): void {

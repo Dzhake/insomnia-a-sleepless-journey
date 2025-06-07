@@ -1,3 +1,4 @@
+import { ArchipelagoClient } from "./arhipelago/client.js";
 import { Camera } from "./camera.ts";
 import { Canvas } from "./canvas.ts";
 import { CoreEvent, Scene } from "./core.ts";
@@ -64,7 +65,7 @@ export class GameScene implements Scene {
     constructor(param: any, event: CoreEvent) {
 
         this.message = new MessageBox(event);
-        this.progress = new ProgressManager();
+        this.progress = ProgressManager.getInstance();
         this.saveManager = new SaveManager(this.progress);
         this.hintbox = new HintBox();
 
@@ -245,6 +246,7 @@ export class GameScene implements Scene {
 
         this.progress.recoverFromJSON(data);
         this.objects.reinitializeObjectsByProgress(this.camera);
+        ArchipelagoClient.getInstance().updateReceivedItems();
 
         if (this.progress.getBooleanProperty("switchState")) {
 

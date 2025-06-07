@@ -174,7 +174,12 @@ export class Player extends CollisionObject {
         this.isInFinalArea = isInFinalArea;
     }
 
-    public static getInstance(): Player { return Player.instance; }
+    public static getInstance(): Player {
+        if (!Player.instance) {
+            Player.instance = new Player();
+        }
+        return Player.instance;
+    }
 
     private startClimbing(event: CoreEvent) {
 

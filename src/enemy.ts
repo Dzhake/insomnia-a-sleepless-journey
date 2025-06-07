@@ -340,7 +340,8 @@ export class Enemy extends CollisionObject {
         this.starSprite.setFrame((Math.random() * 4) | 0, 1);
 
         if (!this.ghost) {
-            ArchipelagoClient.getInstance().client.send(this.entityID + 114);
+            ArchipelagoClient.getInstance().client.check(this.entityID + 114);
+            console.log(this.entityID + 114);
             //progress.increaseNumberProperty("kills", 1);
             progress.addValueToArray("enemiesKilled", this.entityID, true);
         }
