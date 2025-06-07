@@ -77,19 +77,20 @@ export class ArchipelagoClient {
         log.innerText = "";
         for (const item of items) {
             log.innerText += `Received ${item.name} at ${item.locationName}\n`
-            switch (item.id) {
+            const id = item.id - 1;
+            switch (id) {
                 case 13:
-                    player.progress.increaseNumberProperty("stars");
+                    player.progress.setBooleanProperty("fansEnabled");
                     break;
                 case 14:
-                    player.progress.increaseNumberProperty("kills");
+                    player.progress.increaseNumberProperty("stars");
                     break;
                 case 15:
-                    player.progress, setBooleanProperty("fansEnabled");
+                    player.progress.increaseNumberProperty("kills");
                     break;
                 default:
-                    if (!player.progress.doesValueExistInArray("items", item.id)) {
-                        this.receiveEquipment(item.id)
+                    if (!player.progress.doesValueExistInArray("items", id)) {
+                        this.receiveEquipment(id)
                     }
                     break;
             }
@@ -154,8 +155,6 @@ export class ArchipelagoClient {
         const prevPos: Vector2 = player.pos.clone();
         const roomOffset: Vector2 = new Vector2(prevPos.x % 160, prevPos.y % 144);
         const newPos: Vector2 = new Vector2(c * 160 + roomOffset.x, r * 144 + roomOffset.y);
-        console.log(roomOffset);
-        console.log(newPos);
         player.pos = newPos;
     }
 }

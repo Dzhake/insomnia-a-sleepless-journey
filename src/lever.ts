@@ -1,3 +1,4 @@
+import { ArchipelagoClient } from "./arhipelago/client.js";
 import { Camera } from "./camera.ts";
 import { Canvas, Flip } from "./canvas.ts";
 import { CoreEvent } from "./core.ts";
@@ -10,12 +11,12 @@ import { Vector2 } from "./vector.ts";
 
 export class Lever extends StrongInteractionTarget {
 
-    private activated : boolean;
+    private activated: boolean;
 
-    private readonly message : MessageBox;
+    private readonly message: MessageBox;
 
 
-    constructor(x : number, y : number, message : MessageBox) {
+    constructor(x: number, y: number, message: MessageBox) {
 
         super(x, y, true);
 
@@ -29,13 +30,13 @@ export class Lever extends StrongInteractionTarget {
     }
 
 
-    protected interactionEvent(player : Player, camera : Camera, event : CoreEvent) {
+    protected interactionEvent(player: Player, camera: Camera, event: CoreEvent) {
 
         const WAIT_TIME = 60;
 
         if (this.activated) return;
 
-        let text = <Array<string>> event.localization.findValue(["lever"]);
+        let text = <Array<string>>event.localization.findValue(["lever"]);
 
         if (text == null) return;
 
@@ -47,21 +48,22 @@ export class Lever extends StrongInteractionTarget {
         this.enable();
 
         player.setUsePose();
-        player.progress.setBooleanProperty("fansEnabled");
+        ArchipelagoClient.getInstance().client().send(14);
+        //player.progress.setBooleanProperty("fansEnabled");
 
         event.audio.playSample(event.assets.getSample("lever"), 0.50);
     }
 
 
-    public draw(canvas : Canvas) {
+    public draw(canvas: Canvas) {
 
         let bmp = canvas.assets.getBitmap("lever");
 
         if (!this.inCamera) return;
 
-        canvas.drawSprite(this.spr, bmp, 
-            this.pos.x - this.spr.width/2,
-            this.pos.y - this.spr.height/2);
+        canvas.drawSprite(this.spr, bmp,
+            this.pos.x - this.spr.width / 2,
+            this.pos.y - this.spr.height / 2);
     }
 
 

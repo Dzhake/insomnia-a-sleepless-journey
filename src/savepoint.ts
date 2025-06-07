@@ -13,7 +13,7 @@ const MESSAGE_TIME_MOVE = 12;
 const MESSAGE_TIME_WAIT = 45;
 
 
-export const saveGame = (message : MessageBox, saveManager : SaveManager, event : CoreEvent) : void => {
+export const saveGame = (message: MessageBox, saveManager: SaveManager, event: CoreEvent): void => {
 
     let text = event.localization.findValue(["saveGame"]);
 
@@ -38,18 +38,18 @@ export const saveGame = (message : MessageBox, saveManager : SaveManager, event 
 export class SavePoint extends StrongInteractionTarget {
 
 
-    public readonly  id : number;
-    
-    private activated : boolean;
-    private wave : number;
-    private messageTimer : number;
+    public readonly id: number;
 
-    private readonly message : MessageBox;
-    private readonly saveManager : SaveManager;
+    private activated: boolean;
+    private wave: number;
+    private messageTimer: number;
+
+    private readonly message: MessageBox;
+    private readonly saveManager: SaveManager;
 
 
-    constructor(x : number, y : number, id : number, 
-        message : MessageBox, saveManager : SaveManager) {
+    constructor(x: number, y: number, id: number,
+        message: MessageBox, saveManager: SaveManager) {
 
         super(x, y, true);
 
@@ -74,7 +74,7 @@ export class SavePoint extends StrongInteractionTarget {
     }
 
 
-    protected updateLogic(event : CoreEvent) {
+    protected updateLogic(event: CoreEvent) {
 
         const ANIM_SPEED = 6;
         const WAVE_SPEED = 0.067;
@@ -85,7 +85,7 @@ export class SavePoint extends StrongInteractionTarget {
         }
 
         if (this.activated) {
-            
+
             this.spr.animate(0, 1, 5, ANIM_SPEED, event.step);
         }
         else {
@@ -93,11 +93,11 @@ export class SavePoint extends StrongInteractionTarget {
             this.spr.setFrame(0, 0);
         }
 
-        this.wave = (this.wave + WAVE_SPEED*event.step) % (Math.PI * 2);
+        this.wave = (this.wave + WAVE_SPEED * event.step) % (Math.PI * 2);
     }
 
 
-    protected playerEvent(player : Player, event : CoreEvent) {
+    protected playerEvent(player: Player, event: CoreEvent) {
 
         if (player.getActiveCheckpointReference() != this) {
 
@@ -107,18 +107,16 @@ export class SavePoint extends StrongInteractionTarget {
     }
 
 
-    protected extendedPlayerCollisionEvent(player : Player, event : CoreEvent) {
+    protected extendedPlayerCollisionEvent(player: Player, event: CoreEvent) {
 
-        if (this.activated) 
+        player.maximizeHealth();
+        if (this.activated)
             return;
 
-        this.wave = Math.PI + Math.PI/2;
+        this.wave = Math.PI + Math.PI / 2;
 
         this.messageTimer = MESSAGE_TIME_MOVE + MESSAGE_TIME_WAIT;
 
-        // TODO: Also heal when already active?
-        player.maximizeHealth();
-        
         player.progress.setNumberProperty("checkpoint", this.id);
 
         this.activated = true;
@@ -128,7 +126,7 @@ export class SavePoint extends StrongInteractionTarget {
     }
 
 
-    protected interactionEvent(player : Player, camera : Camera, event : CoreEvent) {
+    protected interactionEvent(player: Player, camera: Camera, event: CoreEvent) {
 
         saveGame(this.message, this.saveManager, event);
 
@@ -136,7 +134,7 @@ export class SavePoint extends StrongInteractionTarget {
     }
 
 
-    public draw(canvas : Canvas) {
+    public draw(canvas: Canvas) {
 
         const AMPLITUDE = 1;
 
@@ -150,9 +148,9 @@ export class SavePoint extends StrongInteractionTarget {
             y = 3 + Math.round(Math.sin(this.wave) * AMPLITUDE);
         }
 
-        canvas.drawSprite(this.spr, bmp, 
-            this.pos.x - this.spr.width/2,
-            this.pos.y - this.spr.height/2 + 1 - y);
+        canvas.drawSprite(this.spr, bmp,
+            this.pos.x - this.spr.width / 2,
+            this.pos.y - this.spr.height / 2 + 1 - y);
 
         if (this.messageTimer > 0) {
 
@@ -163,11 +161,11 @@ export class SavePoint extends StrongInteractionTarget {
             }
             else {
 
-                y -= MESSAGE_TIME_MOVE*2;
+                y -= MESSAGE_TIME_MOVE * 2;
             }
 
             canvas.drawBitmapRegion(bmp, 0, 16, 48, 16,
-                this.pos.x - 24, y-16);
+                this.pos.x - 24, y - 16);
         }
     }
 

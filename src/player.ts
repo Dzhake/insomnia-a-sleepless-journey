@@ -73,7 +73,7 @@ export class Player extends CollisionObject {
     private holdingItem: boolean;
     private itemID: number;
 
-    private inside: boolean;
+    public inside: boolean;
     private startInside: boolean;
     private hasTeleported: boolean;
 

@@ -1,3 +1,4 @@
+import { ArchipelagoClient } from "./arhipelago/client.js";
 import { Camera } from "./camera.ts";
 import { Canvas, Flip } from "./canvas.ts";
 import { CoreEvent } from "./core.ts";
@@ -75,7 +76,9 @@ export class Chest extends StrongInteractionTarget {
         });
 
         player.setObtainItemPose(this.id);
-        player.progress.addValueToArray("items", this.id, true);
+        //player.progress.addValueToArray("items", this.id, true);
+        ArchipelagoClient.getInstance().client.send(this.id + 1);
+        player.progress.addValueToArray("openChests", this.id, true);
 
         this.forceOpen();
     }

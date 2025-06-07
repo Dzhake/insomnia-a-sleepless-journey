@@ -265,6 +265,12 @@ export class ObjectManager {
             .constructor(x * 16 + 8, y * 16 + 8, this.enemies.length));
         e.setProjectileCallback(this.projectileCb);
 
+        /*const r: int = Math.trunc(y / 9) + 1;
+        const c: int = Math.trunc(x / 10) + 1;
+        const typename: string = getEnemyType(id).name;
+        console.log(`${typename.toLowerCase()}_r${r}c${c} = "${typename} R${r}C${c}"`)*/
+        //for python loc names
+
         this.enemies.push(e);
     }
 
@@ -477,7 +483,7 @@ export class ObjectManager {
 
         for (let c of this.chests) {
 
-            if (this.progress.doesValueExistInArray("items", c.id)) {
+            if (this.progress.doesValueExistInArray("openChests", c.id)) {
 
                 c.forceOpen();
             }

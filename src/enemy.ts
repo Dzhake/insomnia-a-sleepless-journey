@@ -1,3 +1,4 @@
+import { ArchipelagoClient } from "./arhipelago/client.js";
 import { Camera } from "./camera.ts";
 import { Canvas, Flip } from "./canvas.ts";
 import { CoreEvent } from "./core.ts";
@@ -23,48 +24,48 @@ enum DeathMode {
 
 export class Enemy extends CollisionObject {
 
-    protected startPos : Vector2;
+    protected startPos: Vector2;
 
-    private deathTimer : number;
-    private deathMode : DeathMode;
-    private starSprite : Sprite;
-    private deathPos : Vector2;
+    private deathTimer: number;
+    private deathMode: DeathMode;
+    private starSprite: Sprite;
+    private deathPos: Vector2;
 
-    protected canJump : boolean;
-    protected oldCanJump : boolean;
+    protected canJump: boolean;
+    protected oldCanJump: boolean;
 
-    protected canBeKnockedDown : boolean;
-    protected knockDownYOffset : number;
-    private knockDownTimer : number;
-    private previousShakeState : boolean;
+    protected canBeKnockedDown: boolean;
+    protected knockDownYOffset: number;
+    private knockDownTimer: number;
+    private previousShakeState: boolean;
 
-    protected flip : Flip;
-    protected dir : number;
+    protected flip: Flip;
+    protected dir: number;
 
-    protected canBeStomped : boolean;
-    protected canBeSpun : boolean;
-    protected knockOnStomp : boolean;
-    protected killOnStomp : boolean;
-    protected dieOnProjectile : boolean;
+    protected canBeStomped: boolean;
+    protected canBeSpun: boolean;
+    protected knockOnStomp: boolean;
+    protected killOnStomp: boolean;
+    protected dieOnProjectile: boolean;
 
-    protected ghost : boolean;
+    protected ghost: boolean;
 
-    protected projectileCb : SpawnProjectileCallback;
+    protected projectileCb: SpawnProjectileCallback;
 
-    private forceReset : boolean;
-    private oldCameraState : boolean;
+    private forceReset: boolean;
+    private oldCameraState: boolean;
 
     // Good variable naming here
-    protected id : number;
-    public readonly entityID : number;
+    protected id: number;
+    public readonly entityID: number;
 
-    private readonly hasBaseGravity : boolean;
+    private readonly hasBaseGravity: boolean;
 
 
     static BASE_GRAVITY = 2.0;
 
 
-    constructor(x : number, y : number, id : number, entityID : number, baseGravity = false) {
+    constructor(x: number, y: number, id: number, entityID: number, baseGravity = false) {
 
         super(x, y, true);
 
@@ -76,7 +77,7 @@ export class Enemy extends CollisionObject {
         this.entityID = entityID;
 
         this.spr = new Sprite(16, 16);
-        this.spr.setFrame(0, this.id+2);
+        this.spr.setFrame(0, this.id + 2);
 
         this.starSprite = new Sprite(16, 16);
 
@@ -92,11 +93,11 @@ export class Enemy extends CollisionObject {
         if (baseGravity) {
 
             this.target.y = Enemy.BASE_GRAVITY;
-        }   
+        }
 
         this.canJump = false;
         this.oldCanJump = this.canJump;
-    
+
         this.knockDownYOffset = 0;
         this.previousShakeState = false;
 
@@ -110,15 +111,17 @@ export class Enemy extends CollisionObject {
         this.deathMode = DeathMode.Normal;
         this.deathPos = this.pos.clone();
 
-        this.dir = -1 + 2 * (Math.floor(x / 16) % 2); 
+        this.dir = -1 + 2 * (Math.floor(x / 16) % 2);
 
         this.ghost = false;
 
         this.oldCameraState = false;
+
+
     }
 
 
-    public setProjectileCallback(cb : SpawnProjectileCallback) {
+    public setProjectileCallback(cb: SpawnProjectileCallback) {
 
         this.projectileCb = cb;
     }
@@ -146,10 +149,10 @@ export class Enemy extends CollisionObject {
         }
     }
 
-    
-    protected die(event : CoreEvent) : boolean {
 
-        const ANIM_SPEED = 3;   
+    protected die(event: CoreEvent): boolean {
+
+        const ANIM_SPEED = 3;
         const PUFF_SPEED = 4;
         const DEATH_GRAVITY = 4.0;
 
@@ -170,11 +173,11 @@ export class Enemy extends CollisionObject {
         this.deathTimer -= event.step;
 
         return this.deathMode == DeathMode.Normal &&
-               this.deathTimer <= 0; 
+            this.deathTimer <= 0;
     }
 
 
-    protected updateAI(event : CoreEvent) { }
+    protected updateAI(event: CoreEvent) { }
 
 
     private knockDown(jump = true) {
@@ -195,7 +198,7 @@ export class Enemy extends CollisionObject {
     }
 
 
-    protected preMovementEvent(event : CoreEvent) {
+    protected preMovementEvent(event: CoreEvent) {
 
         this.oldCameraState = this.inCamera;
 
@@ -220,17 +223,17 @@ export class Enemy extends CollisionObject {
     }
 
 
-    protected postMovementEvent(event : CoreEvent) {
+    protected postMovementEvent(event: CoreEvent) {
 
         this.oldCanJump = this.canJump;
         this.canJump = false;
     }
 
 
-    private drawDeath( canvas : Canvas) {
+    private drawDeath(canvas: Canvas) {
 
         const COUNT = [6, 4];
-        const OFFSET = [(Math.PI/2) / 3, Math.PI/4];
+        const OFFSET = [(Math.PI / 2) / 3, Math.PI / 4];
         const DISTANCE = 32.0;
 
         if (this.deathTimer <= 0) return;
@@ -239,46 +242,46 @@ export class Enemy extends CollisionObject {
         let offset = OFFSET[this.deathMode];
 
         let bmp = canvas.assets.getBitmap("enemies");
-    
-        let t = 1.0 - this.deathTimer / DEATH_TIME;
-        let angle : number;
 
-        let x : number;
-        let y : number;
+        let t = 1.0 - this.deathTimer / DEATH_TIME;
+        let angle: number;
+
+        let x: number;
+        let y: number;
 
         let px = Math.round(this.deathPos.x);
         let py = Math.round(this.deathPos.y);
 
-        for (let i = 0; i < count; ++ i) {
+        for (let i = 0; i < count; ++i) {
 
             angle = offset + i * (Math.PI * 2 / count);
 
             x = px + (Math.cos(angle) * t * DISTANCE);
             y = py + (Math.sin(angle) * t * DISTANCE);
 
-            canvas.drawSprite(this.starSprite, bmp, 
-                Math.round(x) - this.spr.width/2, 
-                Math.round(y) - this.spr.height/2, 
+            canvas.drawSprite(this.starSprite, bmp,
+                Math.round(x) - this.spr.width / 2,
+                Math.round(y) - this.spr.height / 2,
                 this.flip);
         }
     }
 
 
-    protected preDraw(canvas : Canvas) {}
+    protected preDraw(canvas: Canvas) { }
 
 
-    public draw(canvas : Canvas) {
+    public draw(canvas: Canvas) {
 
         const GHOST_ALPHA = 0.75;
 
-        if (!this.exist || !this.inCamera) 
+        if (!this.exist || !this.inCamera)
             return;
 
         if (this.dying) {
 
             this.drawDeath(canvas);
-        
-            if (this.spr.getColumn() == 4) 
+
+            if (this.spr.getColumn() == 4)
                 return;
         }
 
@@ -289,11 +292,11 @@ export class Enemy extends CollisionObject {
 
         this.preDraw(canvas);
 
-        let px = Math.round(this.pos.x) - this.spr.width/2;
-        let py = Math.round(this.pos.y) - this.spr.height/2;
+        let px = Math.round(this.pos.x) - this.spr.width / 2;
+        let py = Math.round(this.pos.y) - this.spr.height / 2;
 
         let flip = this.flip;
-        if (this.knockDownTimer > 0 || 
+        if (this.knockDownTimer > 0 ||
             (this.dying && this.deathMode == DeathMode.Spun)) {
 
             flip |= Flip.Vertical;
@@ -305,13 +308,13 @@ export class Enemy extends CollisionObject {
         canvas.drawSprite(this.spr, bmp, px, py, flip);
 
         if (this.ghost) {
-            
+
             canvas.setGlobalAlpha();
         }
     }
 
 
-    public cameraEvent(camera : Camera) {
+    public cameraEvent(camera: Camera) {
 
         if (!this.inCamera && this.forceReset &&
             !camera.isMoving()) {
@@ -323,10 +326,10 @@ export class Enemy extends CollisionObject {
     }
 
 
-    protected playerEvent(player : Player, event : CoreEvent) { }
+    protected playerEvent(player: Player, event: CoreEvent) { }
 
 
-    protected killSelf(progress : ProgressManager, event : CoreEvent, 
+    protected killSelf(progress: ProgressManager, event: CoreEvent,
         deathMode = DeathMode.Normal) {
 
         this.dying = true;
@@ -337,8 +340,8 @@ export class Enemy extends CollisionObject {
         this.starSprite.setFrame((Math.random() * 4) | 0, 1);
 
         if (!this.ghost) {
-
-            progress.increaseNumberProperty("kills", 1);
+            ArchipelagoClient.getInstance().client.send(this.entityID + 114);
+            //progress.increaseNumberProperty("kills", 1);
             progress.addValueToArray("enemiesKilled", this.entityID, true);
         }
 
@@ -348,7 +351,7 @@ export class Enemy extends CollisionObject {
     }
 
 
-    private spinKnockback(player : Player) {
+    private spinKnockback(player: Player) {
 
         const SPUN_FLY_SPEED_X = 3.0;
         const SPUN_FLY_SPEED_Y = -3.0;
@@ -359,25 +362,25 @@ export class Enemy extends CollisionObject {
     }
 
 
-    public playerCollision(player : Player, event : CoreEvent) : boolean {
+    public playerCollision(player: Player, event: CoreEvent): boolean {
 
         const STOMP_MARGIN = 4;
         const STOMP_EXTRA_RANGE = 2;
         const SPEED_EPS = -0.25;
         const PLAYER_JUMP = -3.0;
 
-        if (!this.exist || !this.inCamera || this.dying) 
+        if (!this.exist || !this.inCamera || this.dying)
             return false;
 
-        let y = this.pos.y + this.center.y - this.hitbox.y - STOMP_MARGIN/4;
+        let y = this.pos.y + this.center.y - this.hitbox.y - STOMP_MARGIN / 4;
         let h = STOMP_MARGIN + Math.abs(this.speed.y);
 
         let hbox = player.getHitbox();
 
-        let py = player.getPos().y + hbox.y/2;
-        let px = player.getPos().x - hbox.x/2;
+        let py = player.getPos().y + hbox.y / 2;
+        let px = player.getPos().x - hbox.x / 2;
 
-        if ((this.canBeSpun || this.knockDownTimer > 0) && 
+        if ((this.canBeSpun || this.knockDownTimer > 0) &&
             player.checkSpinOverlay(this)) {
 
             this.spinKnockback(player);
@@ -389,12 +392,12 @@ export class Enemy extends CollisionObject {
         if ((this.canBeStomped || this.knockDownTimer > 0) &&
             (!player.isSwimming() || player.isSpinning()) &&
             player.getSpeed().y > SPEED_EPS &&
-            px + hbox.x >= this.pos.x - this.hitbox.x/2 - STOMP_EXTRA_RANGE &&
-            px <= this.pos.x + this.hitbox.x/2 + STOMP_EXTRA_RANGE &&
-            py >= y && py <= y+h) {
+            px + hbox.x >= this.pos.x - this.hitbox.x / 2 - STOMP_EXTRA_RANGE &&
+            px <= this.pos.x + this.hitbox.x / 2 + STOMP_EXTRA_RANGE &&
+            py >= y && py <= y + h) {
 
             if (!player.isSpinning()) {
-                
+
                 player.makeJump(PLAYER_JUMP);
 
                 if ((!this.killOnStomp || this.knockOnStomp) &&
@@ -427,18 +430,18 @@ export class Enemy extends CollisionObject {
             this.playerEvent(player, event);
 
         return player.hurtCollision(
-            this.pos.x - this.hitbox.x/2,
-            this.pos.y - this.hitbox.y/2,
+            this.pos.x - this.hitbox.x / 2,
+            this.pos.y - this.hitbox.y / 2,
             this.hitbox.x, this.hitbox.y,
             Math.sign(player.getPos().x - this.pos.x), event);
     }
 
 
-    public projectileCollision(p : Projectile, player : Player, event : CoreEvent) : boolean {
+    public projectileCollision(p: Projectile, player: Player, event: CoreEvent): boolean {
 
         if (!p.isFriendly() ||
             !this.exist || !this.inCamera || this.dying ||
-            !p.doesExist() || p.isDying()) 
+            !p.doesExist() || p.isDying())
             return false;
 
         if (this.overlayObject(p)) {
@@ -455,7 +458,7 @@ export class Enemy extends CollisionObject {
     }
 
 
-    protected verticalCollisionEvent(dir : number, event : CoreEvent) {
+    protected verticalCollisionEvent(dir: number, event: CoreEvent) {
 
         if (dir == 1) {
 
@@ -470,10 +473,10 @@ export class Enemy extends CollisionObject {
     }
 
 
-    public isGhost = () : boolean => this.ghost;
-    
+    public isGhost = (): boolean => this.ghost;
 
-    protected respawnEvent() {}
+
+    protected respawnEvent() { }
 
 
     private reset() {
@@ -485,7 +488,7 @@ export class Enemy extends CollisionObject {
 
         this.stopMovement();
 
-        this.spr.setFrame(0, this.id+2);
+        this.spr.setFrame(0, this.id + 2);
 
         this.pos = this.startPos.clone();
 
@@ -525,7 +528,7 @@ export class Enemy extends CollisionObject {
 export class Slime extends Enemy {
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
         super(x, y, 0, entityID, true);
 
@@ -544,16 +547,16 @@ export class Slime extends Enemy {
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const ANIM_SPEED = 8;
 
-        this.spr.animate(this.spr.getRow(), 
+        this.spr.animate(this.spr.getRow(),
             0, 3, ANIM_SPEED, event.step);
     }
 
 
-    protected playerEvent(player : Player, event : CoreEvent) {
+    protected playerEvent(player: Player, event: CoreEvent) {
 
         this.flip = player.getPos().x < this.pos.x ? Flip.None : Flip.Horizontal;
     }
@@ -564,7 +567,7 @@ export class Slime extends Enemy {
 export class SpikeSlime extends Enemy {
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
         super(x, y, 1, entityID, true);
 
@@ -578,19 +581,19 @@ export class SpikeSlime extends Enemy {
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const WAIT_TIME = 60;
         const ANIM_SPEED = 12;
 
-        this.spr.animate(this.spr.getRow(), 
-            0, 3, 
-            this.spr.getColumn() == 0 ? WAIT_TIME : ANIM_SPEED, 
+        this.spr.animate(this.spr.getRow(),
+            0, 3,
+            this.spr.getColumn() == 0 ? WAIT_TIME : ANIM_SPEED,
             event.step);
     }
 
 
-    protected playerEvent(player : Player, event : CoreEvent) {
+    protected playerEvent(player: Player, event: CoreEvent) {
 
         this.flip = player.getPos().x < this.pos.x ? Flip.None : Flip.Horizontal;
     }
@@ -601,13 +604,13 @@ export class SpikeSlime extends Enemy {
 export class Turtle extends Enemy {
 
 
-    protected baseSpeed : number;
-    protected animSpeed : number;
+    protected baseSpeed: number;
+    protected animSpeed: number;
 
 
-    constructor(x : number, y : number, entityID : number) { 
+    constructor(x: number, y: number, entityID: number) {
 
-        super(x, y+1, 2, entityID, true);
+        super(x, y + 1, 2, entityID, true);
 
         this.spr.setFrame(0, this.spr.getRow());
 
@@ -632,13 +635,13 @@ export class Turtle extends Enemy {
 
         this.baseSpeed = this.dir * SPEED;
 
-        this.dir = -1 + 2 * (Math.floor(this.startPos.x / 16) % 2); 
+        this.dir = -1 + 2 * (Math.floor(this.startPos.x / 16) % 2);
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
-        this.spr.animate(this.spr.getRow(), 
+        this.spr.animate(this.spr.getRow(),
             0, 3, this.animSpeed, event.step);
 
         if (this.oldCanJump && !this.canJump) {
@@ -655,7 +658,7 @@ export class Turtle extends Enemy {
     }
 
 
-    protected wallCollisionEvent(dir : number, event : CoreEvent) {
+    protected wallCollisionEvent(dir: number, event: CoreEvent) {
 
         this.dir = -dir;
         this.baseSpeed = Math.abs(this.baseSpeed) * this.dir;
@@ -670,15 +673,15 @@ export class Turtle extends Enemy {
 export class Seal extends Enemy {
 
 
-    private jumpTimer : number;
-    protected jumpInterval : number;
-    protected jumpHeight : number;
-    protected moveSpeed : number;
+    private jumpTimer: number;
+    protected jumpInterval: number;
+    protected jumpHeight: number;
+    protected moveSpeed: number;
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
-        super(x, y+1, 3, entityID, true);
+        super(x, y + 1, 3, entityID, true);
 
         this.center = new Vector2(0, 3);
         this.hitbox = new Vector2(8, 8);
@@ -702,11 +705,11 @@ export class Seal extends Enemy {
 
         this.jumpTimer = this.jumpInterval + (((x / 16) | 0) % 2) * this.jumpInterval / 2;
 
-        this.dir = -1 + 2 * (Math.floor(this.startPos.x / 16) % 2); 
+        this.dir = -1 + 2 * (Math.floor(this.startPos.x / 16) % 2);
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const EPS = 0.5;
 
@@ -742,7 +745,7 @@ export class Seal extends Enemy {
     }
 
 
-    protected wallCollisionEvent(dir : number, event : CoreEvent) {
+    protected wallCollisionEvent(dir: number, event: CoreEvent) {
 
         if (this.canJump) return;
 
@@ -757,15 +760,15 @@ export class Seal extends Enemy {
 export class SpikeTurtle extends Turtle {
 
 
-    constructor(x : number, y : number, entityID : number) {
-        
+    constructor(x: number, y: number, entityID: number) {
+
         super(x, y, entityID);
 
         this.canBeStomped = false;
         this.canBeSpun = false;
 
         this.id = 4;
-        this.spr.setFrame(0, this.id+2);
+        this.spr.setFrame(0, this.id + 2);
 
         this.center = new Vector2(0, 3);
         this.hitbox = new Vector2(10, 10);
@@ -779,8 +782,8 @@ export class SpikeTurtle extends Turtle {
         const SPEED = 0.30;
 
         this.baseSpeed = this.dir * SPEED;
-        
-        this.dir = -1 + 2 * (Math.floor(this.startPos.x / 16) % 2); 
+
+        this.dir = -1 + 2 * (Math.floor(this.startPos.x / 16) % 2);
     }
 }
 
@@ -788,12 +791,12 @@ export class SpikeTurtle extends Turtle {
 class WaveObject extends Enemy {
 
 
-    protected wave : Vector2;
-    protected waveSpeed : Vector2;
-    protected amplitude : Vector2;
+    protected wave: Vector2;
+    protected waveSpeed: Vector2;
+    protected amplitude: Vector2;
 
 
-    constructor(x : number, y : number, id : number, entityID : number) {
+    constructor(x: number, y: number, id: number, entityID: number) {
 
         super(x, y, id, entityID, false);
 
@@ -803,15 +806,15 @@ class WaveObject extends Enemy {
         this.waveSpeed = new Vector2(0.0, 0.0);
         this.amplitude = new Vector2(0, 0);
     }
-    
 
-    protected updateWave(event : CoreEvent) {
-        
+
+    protected updateWave(event: CoreEvent) {
+
         this.wave.x += this.waveSpeed.x * event.step;
-        this.wave.x %= Math.PI*2;
+        this.wave.x %= Math.PI * 2;
 
         this.wave.y += this.waveSpeed.y * event.step;
-        this.wave.y %= Math.PI*2;
+        this.wave.y %= Math.PI * 2;
 
         this.pos.x = this.startPos.x + Math.sin(this.wave.x) * this.amplitude.x;
         this.pos.y = this.startPos.y + Math.sin(this.wave.y) * this.amplitude.y;
@@ -823,7 +826,7 @@ class WaveObject extends Enemy {
 export class Apple extends WaveObject {
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
         super(x, y, 5, entityID);
 
@@ -845,18 +848,18 @@ export class Apple extends WaveObject {
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const ANIM_SPEED = 6;
 
         this.updateWave(event);
 
-        this.spr.animate(this.spr.getRow(), 
+        this.spr.animate(this.spr.getRow(),
             0, 3, ANIM_SPEED, event.step);
     }
 
 
-    protected playerEvent(player : Player, event : CoreEvent) {
+    protected playerEvent(player: Player, event: CoreEvent) {
 
         this.flip = player.getPos().x < this.pos.x ? Flip.None : Flip.Horizontal;
     }
@@ -867,7 +870,7 @@ export class Apple extends WaveObject {
 export class Imp extends WaveObject {
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
         super(x, y, 6, entityID);
 
@@ -889,13 +892,13 @@ export class Imp extends WaveObject {
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const ANIM_SPEED = 6;
 
         this.updateWave(event);
 
-        this.spr.animate(this.spr.getRow(), 
+        this.spr.animate(this.spr.getRow(),
             0, 3, ANIM_SPEED, event.step);
     }
 
@@ -908,12 +911,12 @@ export class Mushroom extends Enemy {
     static JUMP_TIME = 60;
 
 
-    private jumpTimer : number;
+    private jumpTimer: number;
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
-        super(x, y+1, 7, entityID, true);
+        super(x, y + 1, 7, entityID, true);
 
         this.center = new Vector2(0, 3);
         this.hitbox = new Vector2(8, 8);
@@ -935,7 +938,7 @@ export class Mushroom extends Enemy {
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const EPS = 0.5;
         const JUMP_HEIGHT = -2.5;
@@ -966,7 +969,7 @@ export class Mushroom extends Enemy {
     }
 
 
-    protected playerEvent(player : Player, event : CoreEvent) {
+    protected playerEvent(player: Player, event: CoreEvent) {
 
         if (!this.canJump) return;
 
@@ -979,13 +982,13 @@ export class Mushroom extends Enemy {
 export class FakeBlock extends Enemy {
 
 
-    private phase : number;
-    private shakeTimer : number;
+    private phase: number;
+    private shakeTimer: number;
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
-        super(x, y-1, 8, entityID, false);
+        super(x, y - 1, 8, entityID, false);
 
         this.center = new Vector2(0, -1);
         this.collisionBox.y = 16;
@@ -1013,7 +1016,7 @@ export class FakeBlock extends Enemy {
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const RETURN_SPEED = -1.0;
         const EPS = 2.0;
@@ -1044,13 +1047,13 @@ export class FakeBlock extends Enemy {
     }
 
 
-    protected playerEvent(player : Player, event : CoreEvent) {
+    protected playerEvent(player: Player, event: CoreEvent) {
 
         const MARGIN = 32;
         const GRAVITY = 8.0;
 
         let p = player.getPos();
-    
+
         if (this.phase > 0 ||
             p.y < this.pos.y ||
             Math.abs(p.x - this.pos.x) > MARGIN) return;
@@ -1062,7 +1065,7 @@ export class FakeBlock extends Enemy {
     }
 
 
-    protected verticalCollisionEvent(dir : number, event : CoreEvent) {
+    protected verticalCollisionEvent(dir: number, event: CoreEvent) {
 
         const SHAKE_TIME = 60;
         const MAGNITUDE = 1;
@@ -1086,10 +1089,10 @@ export class Spinner extends Enemy {
     static RADIUS = 24;
 
 
-    private angle : number;
+    private angle: number;
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
         super(x, y, 9, entityID, true);
 
@@ -1102,10 +1105,10 @@ export class Spinner extends Enemy {
 
         this.angle = 0;
 
-        this.offCameraRadius = Spinner.RADIUS*2;
+        this.offCameraRadius = Spinner.RADIUS * 2;
 
         this.disableCollisions = true;
-        
+
         this.respawnEvent();
     }
 
@@ -1118,7 +1121,7 @@ export class Spinner extends Enemy {
 
 
     protected respawnEvent() {
-        
+
         this.angle = (this.startPos.y % 360) / 360.0 * (Math.PI * 2);
         this.dir = ((this.startPos.x / 16) | 0) % 2 == 0 ? 1 : -1;
 
@@ -1126,7 +1129,7 @@ export class Spinner extends Enemy {
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const ANIM_SPEED = 8;
         const ROTATION_SPEED = 0.05;
@@ -1135,13 +1138,13 @@ export class Spinner extends Enemy {
         this.computePosition();
 
         let startFrame = this.dir < 0 ? 0 : 2;
-        this.spr.animate(this.spr.getRow(), 
-            startFrame, startFrame+1,
-             ANIM_SPEED, event.step);
+        this.spr.animate(this.spr.getRow(),
+            startFrame, startFrame + 1,
+            ANIM_SPEED, event.step);
     }
 
 
-    protected preDraw(canvas : Canvas) {
+    protected preDraw(canvas: Canvas) {
 
         const CHAIN_PIECE_COUNT = 3;
 
@@ -1150,16 +1153,16 @@ export class Spinner extends Enemy {
         let bmp = canvas.assets.getBitmap("enemies");
 
         let r = 0;
-        let x : number;
-        let y : number;
-        for (let i = 0; i < CHAIN_PIECE_COUNT; ++ i) {
+        let x: number;
+        let y: number;
+        for (let i = 0; i < CHAIN_PIECE_COUNT; ++i) {
 
             x = this.startPos.x + Math.round(Math.cos(this.angle) * this.dir * r);
             y = this.startPos.y + Math.round(Math.sin(this.angle) * r);
 
-            canvas.drawSpriteFrame(this.spr, bmp, 
+            canvas.drawSpriteFrame(this.spr, bmp,
                 4, this.spr.getRow(),
-                x-8, y-8);
+                x - 8, y - 8);
 
             r += radiusStep;
         }
@@ -1170,13 +1173,13 @@ export class Spinner extends Enemy {
 export class Fish extends Enemy {
 
 
-    private baseSpeed : number;
-    private wave : number;
+    private baseSpeed: number;
+    private wave: number;
 
 
-    constructor(x : number, y : number, entityID : number) { 
+    constructor(x: number, y: number, entityID: number) {
 
-        super(x, y+1, 10, entityID, false);
+        super(x, y + 1, 10, entityID, false);
 
         this.spr.setFrame(0, this.spr.getRow());
 
@@ -1203,11 +1206,11 @@ export class Fish extends Enemy {
         this.baseSpeed = this.dir * SPEED;
         this.wave = 0;
 
-        this.dir = -1 + 2 * (Math.floor(this.startPos.x / 16) % 2); 
+        this.dir = -1 + 2 * (Math.floor(this.startPos.x / 16) % 2);
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const WAVE_SPEED = 0.10;
         const BASE_TARGET_Y = 0.25;
@@ -1238,7 +1241,7 @@ export class Fish extends Enemy {
     }
 
 
-    protected wallCollisionEvent(dir : number, event : CoreEvent) {
+    protected wallCollisionEvent(dir: number, event: CoreEvent) {
 
         this.dir = -dir;
         this.baseSpeed = Math.abs(this.baseSpeed) * this.dir;
@@ -1256,13 +1259,13 @@ export class Eye extends Enemy {
     static WAIT_TIME = 60;
 
 
-    private waitTime : number;
-    private animationPhase : number;
+    private waitTime: number;
+    private animationPhase: number;
 
-    private direction : Vector2;
+    private direction: Vector2;
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
         super(x, y, 11, entityID, false);
 
@@ -1289,7 +1292,7 @@ export class Eye extends Enemy {
     }
 
 
-    private shootBullet(event : CoreEvent) {
+    private shootBullet(event: CoreEvent) {
 
         const SPEED = 1.5;
 
@@ -1302,7 +1305,7 @@ export class Eye extends Enemy {
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const ANIM_SPEED = 8;
         const OPEN_TIME = 30;
@@ -1313,7 +1316,7 @@ export class Eye extends Enemy {
 
                 this.shootBullet(event);
 
-                this.animationPhase = 1;   
+                this.animationPhase = 1;
             }
         }
         else if (this.animationPhase == 1) {
@@ -1340,7 +1343,7 @@ export class Eye extends Enemy {
     }
 
 
-    protected playerEvent(player : Player, event : CoreEvent) {
+    protected playerEvent(player: Player, event: CoreEvent) {
 
         this.direction = Vector2.direction(this.pos, player.getPos());
     }
@@ -1353,11 +1356,11 @@ class FaceRight extends Enemy {
     static WAIT_TIME = 60;
 
 
-    private waitTime : number;
-    private mouthOpen : boolean;
+    private waitTime: number;
+    private mouthOpen: boolean;
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
         super(x, y, 12, entityID, false);
 
@@ -1386,18 +1389,18 @@ class FaceRight extends Enemy {
     }
 
 
-    private shootBullet(event : CoreEvent) {
+    private shootBullet(event: CoreEvent) {
 
         const SPEED = 2.0;
 
-        this.projectileCb(this.pos.x + this.dir*4, this.pos.y+2,
+        this.projectileCb(this.pos.x + this.dir * 4, this.pos.y + 2,
             SPEED * this.dir, 0, false, 1, false);
 
         event.audio.playSample(event.assets.getSample("shoot"), 0.40);
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const ANIM_SPEED = 30;
 
@@ -1426,9 +1429,9 @@ class FaceRight extends Enemy {
 
 
 export class FaceLeft extends FaceRight {
-    
-    
-    constructor(x : number, y : number, entityID : number) {
+
+
+    constructor(x: number, y: number, entityID: number) {
 
         super(x, y, entityID);
 
@@ -1442,12 +1445,12 @@ export class FaceLeft extends FaceRight {
 export class SpikeSeal extends Seal {
 
 
-    constructor(x : number, y : number, entityID : number) {
+    constructor(x: number, y: number, entityID: number) {
 
         super(x, y, entityID);
 
         this.id = 13;
-        this.spr.setFrame(0, this.id+2);
+        this.spr.setFrame(0, this.id + 2);
 
         this.knockDownYOffset = 4;
 
@@ -1466,14 +1469,14 @@ export class SpikeSeal extends Seal {
 export class Plant extends Enemy {
 
 
-    private baseSpeed : number;
-    private shootTimer : number;
-    private shootWait : number;
+    private baseSpeed: number;
+    private shootTimer: number;
+    private shootWait: number;
 
 
-    constructor(x : number, y : number, entityID : number) { 
+    constructor(x: number, y: number, entityID: number) {
 
-        super(x, y+1, 14, entityID, true);
+        super(x, y + 1, 14, entityID, true);
 
         this.spr.setFrame(0, this.spr.getRow());
 
@@ -1503,22 +1506,22 @@ export class Plant extends Enemy {
     }
 
 
-    private shootBullet(event : CoreEvent) {
+    private shootBullet(event: CoreEvent) {
 
         const SPEED_Y = -2.5;
         const SPEED_X = 0.75;
 
         for (let i = -1; i <= 1; i += 2) {
 
-            this.projectileCb(this.pos.x, this.pos.y-2,
-               SPEED_X * i, SPEED_Y, true, 1, false);
+            this.projectileCb(this.pos.x, this.pos.y - 2,
+                SPEED_X * i, SPEED_Y, true, 1, false);
         }
 
         event.audio.playSample(event.assets.getSample("shoot"), 0.40);
     }
 
 
-    protected updateAI(event : CoreEvent) { 
+    protected updateAI(event: CoreEvent) {
 
         const ANIM_SPEED = 7;
         const SHOOT_TIME = 120;
@@ -1545,7 +1548,7 @@ export class Plant extends Enemy {
             return;
         }
 
-        this.spr.animate(this.spr.getRow(), 
+        this.spr.animate(this.spr.getRow(),
             0, 3, ANIM_SPEED, event.step);
 
         if (this.oldCanJump && !this.canJump) {
@@ -1560,7 +1563,7 @@ export class Plant extends Enemy {
     }
 
 
-    protected wallCollisionEvent(dir : number, event : CoreEvent) {
+    protected wallCollisionEvent(dir: number, event: CoreEvent) {
 
         this.dir = -dir;
         this.baseSpeed = Math.abs(this.baseSpeed) * this.dir;
@@ -1573,11 +1576,11 @@ export class Plant extends Enemy {
 
 
 const ENEMY_TYPES = [
-    Slime, SpikeSlime, Turtle, 
-    Seal, SpikeTurtle, Apple, 
-    Imp, Mushroom, FakeBlock, 
+    Slime, SpikeSlime, Turtle,
+    Seal, SpikeTurtle, Apple,
+    Imp, Mushroom, FakeBlock,
     Spinner, Fish, Eye,
     FaceRight, FaceLeft, SpikeSeal,
     Plant];
 
-export const getEnemyType = (index : number) : Class => ENEMY_TYPES[clamp(index, 0, ENEMY_TYPES.length-1)];
+export const getEnemyType = (index: number): Class => ENEMY_TYPES[clamp(index, 0, ENEMY_TYPES.length - 1)];
